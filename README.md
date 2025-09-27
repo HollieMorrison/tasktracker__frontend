@@ -1,12 +1,17 @@
-# React + Vite
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+# query our backend server and hit the superuser/tasks endpoint
+# get bootstrap working correctly
+# get react router working correctly
+# create a task component
+# render the tasks returned from endpoint
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+# how to login / register / auth with our server
+# create ui for login / register / user profile
+# using react-router for pages - setup the auth flow / user task area and auth restriction. 
+# fetch / create / edit / delete tasks via signed in user.
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+# figure the auth strategy for react -> django server because both are
+# now decoupled. before django rendered the frontend so exposed the authed user into the template wheras now our frontend only communicates via api calls. 
+# possible chance of stateless or statefull auth.
