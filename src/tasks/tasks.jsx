@@ -1,6 +1,7 @@
 // src/tasks/TaskList.jsx
 import { useEffect, useMemo, useState } from "react";
-import { api } from "../api/client"; // make sure you export `api` from your axios client
+import { api } from "../api/client";
+import CreateTaskModal from "./task.create";
 
 const PRIORITY_LABELS = { 1: "Low", 2: "Medium", 3: "High", 4: "Urgent" };
 
@@ -14,12 +15,14 @@ export default function TaskList() {
   const [q, setQ] = useState("");
   const [stateFilter, setStateFilter] = useState("all");
   const [priorityFilter, setPriorityFilter] = useState("all");
-  const [overdueFilter, setOverdueFilter] = useState("all"); // all | yes | no
+  const [overdueFilter, setOverdueFilter] = useState("all");
+  const [showCreate, setShowCreate] = useState(false);
+  const [categories, setCategories] = useState([]); // optional helper
 
   useEffect(() => {
     (async () => {
       try {
-        const { data } = await api.get("/api/tasks/"); // <— as requested
+        const { data } = await api.get("/api/tasks/");
         setTasks(Array.isArray(data) ? data : data.tasks || []);
       } catch (e) {
         console.error(e);
@@ -28,9 +31,20 @@ export default function TaskList() {
     })();
   }, []);
 
+  // Optional: fetch categories for nicer select in modal (adjust path if needed)
+  useEffect(() => {
+    (async () => {
+      try {
+        const { data } = await api.get("/api/categories/"); // if you have this endpoint
+        if (Array.isArray(data)) setCategories(data);
+      } catch {
+        // silently ignore if endpoint doesn't exist; the modal will fall back to a free ID input
+      }
+    })();
+  }, []);
+
   const filtered = useMemo(() => {
     const query = q.trim().toLowerCase();
-
     return tasks.filter((t) => {
       if (query) {
         const hay = `${t.title || ""} ${t.description || ""} ${t.category__name || ""}`.toLowerCase();
@@ -49,9 +63,14 @@ export default function TaskList() {
 
   return (
     <div className="container mt-4">
-      <h1 className="mb-3">My Tasks</h1>
+      <div className="d-flex align-items-center justify-content-between mb-3">
+        <h1 className="mb-0">My Tasks</h1>
+        <button className="btn btn-primary" onClick={() => setShowCreate(true)}>
+          + New Task
+        </button>
+      </div>
 
-      {/* Simple filter bar */}
+      {/* Simple filter bar (existing) */}
       <div className="card shadow-sm mb-3">
         <div className="card-body">
           <div className="row g-2">
@@ -67,11 +86,7 @@ export default function TaskList() {
 
             <div className="col-6 col-md-2">
               <label className="form-label">State</label>
-              <select
-                className="form-select"
-                value={stateFilter}
-                onChange={(e) => setStateFilter(e.target.value)}
-              >
+              <select className="form-select" value={stateFilter} onChange={(e) => setStateFilter(e.target.value)}>
                 <option value="all">All</option>
                 <option value="open">Open</option>
                 <option value="in_progress">In progress</option>
@@ -145,11 +160,7 @@ export default function TaskList() {
                   <strong>Due:</strong>{" "}
                   {task.due_date ? new Date(task.due_date).toLocaleString() : "No due date"}<br />
                   <strong>Overdue:</strong>{" "}
-                  {task.is_overdue ? (
-                    <span className="badge bg-danger">Yes</span>
-                  ) : (
-                    <span className="badge bg-success">No</span>
-                  )}
+                  {task.is_overdue ? <span className="badge bg-danger">Yes</span> : <span className="badge bg-success">No</span>}
                 </p>
                 <p className="card-text">
                   <small className="text-muted">
@@ -162,10 +173,19 @@ export default function TaskList() {
           </div>
         ))}
 
-        {filtered.length === 0 && (
-          <p className="text-muted">No tasks match your filters</p>
-        )}
+        {filtered.length === 0 && <p className="text-muted">No tasks match your filters</p>}
       </div>
+
+      {/* Create Task Modal */}
+      <CreateTaskModal
+        show={showCreate}
+        onClose={() => setShowCreate(false)}
+        categories={categories}
+        onCreated={(newTask) => {
+          // Optimistically inject at the top of the list
+          setTasks((prev) => [newTask, ...prev]);
+        }}
+      />
     </div>
   );
 }

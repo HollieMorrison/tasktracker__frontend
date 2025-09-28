@@ -10,13 +10,13 @@ i decided on JWT.
 [x] get react router working correctly
 [x] create a task component
 
-[] create a user global context using zustand.
-[] login requests gets back generated token and handle this in storage
-[] auth checks and page protection
-[] display tasks for that user
-[] user component that shows name , email and ability to sign out
+[x] create a user global context using zustand.
+[x] login requests gets back generated token and handle this in storage
+[x] auth checks and page protection
+[x] display tasks for that user
+[x] user component that shows name , email and ability to sign out
+[x] tasks filtering and status ability
 
-[] tasks filtering and status ability ( needs more backend logic implemented)
 [] ability to create new tasks
 [] ability to delete existing tasks.
 ---
