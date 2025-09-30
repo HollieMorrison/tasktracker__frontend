@@ -65,6 +65,80 @@ export default function TaskList() {
         <button className="btn btn-primary" onClick={() => setShowCreate(true)}>+ New Task</button>
       </div>
 
+            {/* Simple filter bar (existing) */}
+      <div className="card shadow-sm mb-3">
+        <div className="card-body">
+          <div className="row g-2">
+            <div className="col-12 col-md-5">
+              <label className="form-label">Search</label>
+              <input
+                className="form-control"
+                placeholder="Title, description, category…"
+                value={q}
+                onChange={(e) => setQ(e.target.value)}
+              />
+            </div>
+
+            <div className="col-6 col-md-2">
+              <label className="form-label">State</label>
+              <select className="form-select" value={stateFilter} onChange={(e) => setStateFilter(e.target.value)}>
+                <option value="all">All</option>
+                <option value="open">Open</option>
+                <option value="in_progress">In progress</option>
+                <option value="done">Done</option>
+                <option value="cancelled">Cancelled</option>
+              </select>
+            </div>
+
+            <div className="col-6 col-md-2">
+              <label className="form-label">Priority</label>
+              <select
+                className="form-select"
+                value={priorityFilter}
+                onChange={(e) => setPriorityFilter(e.target.value)}
+              >
+                <option value="all">All</option>
+                <option value="4">Urgent</option>
+                <option value="3">High</option>
+                <option value="2">Medium</option>
+                <option value="1">Low</option>
+              </select>
+            </div>
+
+            <div className="col-6 col-md-2">
+              <label className="form-label">Overdue</label>
+              <select
+                className="form-select"
+                value={overdueFilter}
+                onChange={(e) => setOverdueFilter(e.target.value)}
+              >
+                <option value="all">All</option>
+                <option value="yes">Only overdue</option>
+                <option value="no">Only not overdue</option>
+              </select>
+            </div>
+
+            <div className="col-6 col-md-1 d-flex align-items-end">
+              <button
+                className="btn btn-outline-secondary w-100"
+                onClick={() => {
+                  setQ("");
+                  setStateFilter("all");
+                  setPriorityFilter("all");
+                  setOverdueFilter("all");
+                }}
+              >
+                Reset
+              </button>
+            </div>
+          </div>
+
+          <div className="mt-2 text-muted small">
+            Showing <strong>{filtered.length}</strong> of {tasks.length} task{tasks.length !== 1 ? "s" : ""}
+          </div>
+        </div>
+      </div>
+
       <div className="row">
         {filtered.map((task) => (
           <div className="col-md-4 mb-3" key={task.id}>
