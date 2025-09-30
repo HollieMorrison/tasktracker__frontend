@@ -1,25 +1,23 @@
-// src/tasks/TaskList.jsx
 import { useEffect, useMemo, useState } from "react";
-import { api } from "../api/client"; // make sure you export `api` from your axios client
+import { api } from "../api/client";
+import TaskCard from "./task";
+import CreateTaskModal from "./task.create"; 
 
 const PRIORITY_LABELS = { 1: "Low", 2: "Medium", 3: "High", 4: "Urgent" };
-
-function humanState(s) {
-  if (!s) return "";
-  return s.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
-}
+function humanState(s) { if (!s) return ""; return s.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase()); }
 
 export default function TaskList() {
   const [tasks, setTasks] = useState([]);
   const [q, setQ] = useState("");
   const [stateFilter, setStateFilter] = useState("all");
   const [priorityFilter, setPriorityFilter] = useState("all");
-  const [overdueFilter, setOverdueFilter] = useState("all"); // all | yes | no
+  const [overdueFilter, setOverdueFilter] = useState("all");
+  const [showCreate, setShowCreate] = useState(false);
 
   useEffect(() => {
     (async () => {
       try {
-        const { data } = await api.get("/api/tasks/"); // <— as requested
+        const { data } = await api.get("/api/tasks/");
         setTasks(Array.isArray(data) ? data : data.tasks || []);
       } catch (e) {
         console.error(e);
@@ -30,7 +28,6 @@ export default function TaskList() {
 
   const filtered = useMemo(() => {
     const query = q.trim().toLowerCase();
-
     return tasks.filter((t) => {
       if (query) {
         const hay = `${t.title || ""} ${t.description || ""} ${t.category__name || ""}`.toLowerCase();
@@ -47,11 +44,28 @@ export default function TaskList() {
     });
   }, [tasks, q, stateFilter, priorityFilter, overdueFilter]);
 
+  const handleUpdated = (updated) => {
+    setTasks((prev) => prev.map((t) => (t.id === updated.id ? updated : t)));
+  };
+
+  const handleDelete = async (task) => {
+    if (!window.confirm(`Delete "${task.title}"?`)) return;
+    try {
+      await api.delete(`/api/tasks/${task.id}/`);
+      setTasks((prev) => prev.filter((t) => t.id !== task.id));
+    } catch (e) {
+      alert("Failed to delete task.");
+    }
+  };
+
   return (
     <div className="container mt-4">
-      <h1 className="mb-3">My Tasks</h1>
+      <div className="d-flex align-items-center justify-content-between mb-3">
+        <h1 className="mb-0">My Tasks</h1>
+        <button className="btn btn-primary" onClick={() => setShowCreate(true)}>+ New Task</button>
+      </div>
 
-      {/* Simple filter bar */}
+            {/* Simple filter bar (existing) */}
       <div className="card shadow-sm mb-3">
         <div className="card-body">
           <div className="row g-2">
@@ -67,11 +81,7 @@ export default function TaskList() {
 
             <div className="col-6 col-md-2">
               <label className="form-label">State</label>
-              <select
-                className="form-select"
-                value={stateFilter}
-                onChange={(e) => setStateFilter(e.target.value)}
-              >
+              <select className="form-select" value={stateFilter} onChange={(e) => setStateFilter(e.target.value)}>
                 <option value="all">All</option>
                 <option value="open">Open</option>
                 <option value="in_progress">In progress</option>
@@ -129,43 +139,22 @@ export default function TaskList() {
         </div>
       </div>
 
-      {/* Cards */}
       <div className="row">
         {filtered.map((task) => (
           <div className="col-md-4 mb-3" key={task.id}>
-            <div className={`card shadow-sm border-${task.is_overdue ? "danger" : "secondary"}`}>
-              <div className="card-body">
-                <h5 className="card-title text-capitalize">{task.title}</h5>
-                <h6 className="card-subtitle mb-2 text-muted">
-                  Category: {task.category__name || "Uncategorized"}
-                </h6>
-                <p className="card-text">
-                  <strong>State:</strong> {humanState(task.state)}<br />
-                  <strong>Priority:</strong> {PRIORITY_LABELS[task.priority] || task.priority}<br />
-                  <strong>Due:</strong>{" "}
-                  {task.due_date ? new Date(task.due_date).toLocaleString() : "No due date"}<br />
-                  <strong>Overdue:</strong>{" "}
-                  {task.is_overdue ? (
-                    <span className="badge bg-danger">Yes</span>
-                  ) : (
-                    <span className="badge bg-success">No</span>
-                  )}
-                </p>
-                <p className="card-text">
-                  <small className="text-muted">
-                    Created by {task.created_by__username} on{" "}
-                    {task.created_at ? new Date(task.created_at).toLocaleDateString() : "—"}
-                  </small>
-                </p>
-              </div>
-            </div>
+            <TaskCard task={task} onUpdated={handleUpdated} onDelete={handleDelete} />
           </div>
         ))}
-
-        {filtered.length === 0 && (
-          <p className="text-muted">No tasks match your filters</p>
-        )}
+        {filtered.length === 0 && <p className="text-muted">No tasks match your filters</p>}
       </div>
+
+      {showCreate && (
+        <CreateTaskModal
+          show={showCreate}
+          onClose={() => setShowCreate(false)}
+          onCreated={(newTask) => setTasks((prev) => [newTask, ...prev])}
+        />
+      )}
     </div>
   );
 }
