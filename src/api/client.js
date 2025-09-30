@@ -7,7 +7,8 @@ export const api = axios.create({
 export function setAuth(access) {
   if (access) {
     api.defaults.headers.common.Authorization = `Bearer ${access}`;
-  } else {
+  } 
+  else {
     delete api.defaults.headers.common.Authorization;
   }
 }

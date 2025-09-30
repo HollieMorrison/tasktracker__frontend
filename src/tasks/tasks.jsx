@@ -1,14 +1,10 @@
-// src/tasks/TaskList.jsx
 import { useEffect, useMemo, useState } from "react";
 import { api } from "../api/client";
-import CreateTaskModal from "./task.create";
+import TaskCard from "./task";
+import CreateTaskModal from "./task.create"; 
 
 const PRIORITY_LABELS = { 1: "Low", 2: "Medium", 3: "High", 4: "Urgent" };
-
-function humanState(s) {
-  if (!s) return "";
-  return s.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
-}
+function humanState(s) { if (!s) return ""; return s.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase()); }
 
 export default function TaskList() {
   const [tasks, setTasks] = useState([]);
@@ -17,7 +13,6 @@ export default function TaskList() {
   const [priorityFilter, setPriorityFilter] = useState("all");
   const [overdueFilter, setOverdueFilter] = useState("all");
   const [showCreate, setShowCreate] = useState(false);
-  const [categories, setCategories] = useState([]); // optional helper
 
   useEffect(() => {
     (async () => {
@@ -27,18 +22,6 @@ export default function TaskList() {
       } catch (e) {
         console.error(e);
         setTasks([]);
-      }
-    })();
-  }, []);
-
-  // Optional: fetch categories for nicer select in modal (adjust path if needed)
-  useEffect(() => {
-    (async () => {
-      try {
-        const { data } = await api.get("/api/categories/"); // if you have this endpoint
-        if (Array.isArray(data)) setCategories(data);
-      } catch {
-        // silently ignore if endpoint doesn't exist; the modal will fall back to a free ID input
       }
     })();
   }, []);
@@ -61,131 +44,43 @@ export default function TaskList() {
     });
   }, [tasks, q, stateFilter, priorityFilter, overdueFilter]);
 
+  const handleUpdated = (updated) => {
+    setTasks((prev) => prev.map((t) => (t.id === updated.id ? updated : t)));
+  };
+
+  const handleDelete = async (task) => {
+    if (!window.confirm(`Delete "${task.title}"?`)) return;
+    try {
+      await api.delete(`/api/tasks/${task.id}/`);
+      setTasks((prev) => prev.filter((t) => t.id !== task.id));
+    } catch (e) {
+      alert("Failed to delete task.");
+    }
+  };
+
   return (
     <div className="container mt-4">
       <div className="d-flex align-items-center justify-content-between mb-3">
         <h1 className="mb-0">My Tasks</h1>
-        <button className="btn btn-primary" onClick={() => setShowCreate(true)}>
-          + New Task
-        </button>
+        <button className="btn btn-primary" onClick={() => setShowCreate(true)}>+ New Task</button>
       </div>
 
-      {/* Simple filter bar (existing) */}
-      <div className="card shadow-sm mb-3">
-        <div className="card-body">
-          <div className="row g-2">
-            <div className="col-12 col-md-5">
-              <label className="form-label">Search</label>
-              <input
-                className="form-control"
-                placeholder="Title, description, category…"
-                value={q}
-                onChange={(e) => setQ(e.target.value)}
-              />
-            </div>
-
-            <div className="col-6 col-md-2">
-              <label className="form-label">State</label>
-              <select className="form-select" value={stateFilter} onChange={(e) => setStateFilter(e.target.value)}>
-                <option value="all">All</option>
-                <option value="open">Open</option>
-                <option value="in_progress">In progress</option>
-                <option value="done">Done</option>
-                <option value="cancelled">Cancelled</option>
-              </select>
-            </div>
-
-            <div className="col-6 col-md-2">
-              <label className="form-label">Priority</label>
-              <select
-                className="form-select"
-                value={priorityFilter}
-                onChange={(e) => setPriorityFilter(e.target.value)}
-              >
-                <option value="all">All</option>
-                <option value="4">Urgent</option>
-                <option value="3">High</option>
-                <option value="2">Medium</option>
-                <option value="1">Low</option>
-              </select>
-            </div>
-
-            <div className="col-6 col-md-2">
-              <label className="form-label">Overdue</label>
-              <select
-                className="form-select"
-                value={overdueFilter}
-                onChange={(e) => setOverdueFilter(e.target.value)}
-              >
-                <option value="all">All</option>
-                <option value="yes">Only overdue</option>
-                <option value="no">Only not overdue</option>
-              </select>
-            </div>
-
-            <div className="col-6 col-md-1 d-flex align-items-end">
-              <button
-                className="btn btn-outline-secondary w-100"
-                onClick={() => {
-                  setQ("");
-                  setStateFilter("all");
-                  setPriorityFilter("all");
-                  setOverdueFilter("all");
-                }}
-              >
-                Reset
-              </button>
-            </div>
-          </div>
-
-          <div className="mt-2 text-muted small">
-            Showing <strong>{filtered.length}</strong> of {tasks.length} task{tasks.length !== 1 ? "s" : ""}
-          </div>
-        </div>
-      </div>
-
-      {/* Cards */}
       <div className="row">
         {filtered.map((task) => (
           <div className="col-md-4 mb-3" key={task.id}>
-            <div className={`card shadow-sm border-${task.is_overdue ? "danger" : "secondary"}`}>
-              <div className="card-body">
-                <h5 className="card-title text-capitalize">{task.title}</h5>
-                <h6 className="card-subtitle mb-2 text-muted">
-                  Category: {task.category__name || "Uncategorized"}
-                </h6>
-                <p className="card-text">
-                  <strong>State:</strong> {humanState(task.state)}<br />
-                  <strong>Priority:</strong> {PRIORITY_LABELS[task.priority] || task.priority}<br />
-                  <strong>Due:</strong>{" "}
-                  {task.due_date ? new Date(task.due_date).toLocaleString() : "No due date"}<br />
-                  <strong>Overdue:</strong>{" "}
-                  {task.is_overdue ? <span className="badge bg-danger">Yes</span> : <span className="badge bg-success">No</span>}
-                </p>
-                <p className="card-text">
-                  <small className="text-muted">
-                    Created by {task.created_by__username} on{" "}
-                    {task.created_at ? new Date(task.created_at).toLocaleDateString() : "—"}
-                  </small>
-                </p>
-              </div>
-            </div>
+            <TaskCard task={task} onUpdated={handleUpdated} onDelete={handleDelete} />
           </div>
         ))}
-
         {filtered.length === 0 && <p className="text-muted">No tasks match your filters</p>}
       </div>
 
-      {/* Create Task Modal */}
-      <CreateTaskModal
-        show={showCreate}
-        onClose={() => setShowCreate(false)}
-        categories={categories}
-        onCreated={(newTask) => {
-          // Optimistically inject at the top of the list
-          setTasks((prev) => [newTask, ...prev]);
-        }}
-      />
+      {showCreate && (
+        <CreateTaskModal
+          show={showCreate}
+          onClose={() => setShowCreate(false)}
+          onCreated={(newTask) => setTasks((prev) => [newTask, ...prev])}
+        />
+      )}
     </div>
   );
 }

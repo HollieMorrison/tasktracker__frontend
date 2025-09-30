@@ -1,6 +1,7 @@
 import "./App.css";
 import Tasks from "./tasks/tasks";
 import LoginPage from "./social/login";
+import RegisterPage from "./social/register";
 import { Routes, Route, Link, NavLink, useNavigate, Navigate } from "react-router-dom";
 import { useEffect } from "react";
 import { useAuth } from "./store/auth";
@@ -14,7 +15,7 @@ function Header() {
         <div className="container">
           {/* Brand */}
           <Link className="navbar-brand fw-semibold" to="/">
-            TaskApp
+            TaskTracker
           </Link>
 
           {/* Mobile toggler */}
@@ -55,22 +56,25 @@ function Header() {
 
             {/* Right side */}
             <div className="d-flex align-items-center gap-2">
-              {user ? (
-                <>
-                  <span className="text-white-50 small">Hi, {user.username}</span>
-                  <button
-                    className="btn btn-outline-light btn-sm"
-                    onClick={logout}
-                  >
-                    Logout
-                  </button>
-                </>
-              ) : (
-                <NavLink to="/login" className="btn btn-outline-light">
-                  Login
-                </NavLink>
-              )}
-            </div>
+                {user ? (
+                  <>
+                    <span className="text-white-50 small">Hi, {user.username}</span>
+                    <button className="btn btn-outline-light btn-sm" onClick={logout}>
+                      Logout
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <NavLink to="/login" className="btn btn-outline-light">
+                      Login
+                    </NavLink>
+                    <NavLink to="/register" className="btn btn-light">
+                      Register
+                    </NavLink>
+                  </>
+                )}
+              </div>
+
           </div>
         </div>
       </nav>
@@ -98,7 +102,7 @@ function App() {
 
   // If finished hydrating and not logged in, make sure URL is /login
   useEffect(() => {
-    if (!loading && !user) nav("/login", { replace: true });
+
   }, [loading, user, nav]);
 
   return (
@@ -106,10 +110,12 @@ function App() {
       <Header />
 
       <Routes>
-        {/* Send "/" to /tasks for convenience */}
+
         <Route path="/" element={<Navigate to="/tasks" replace />} />
 
         <Route path="/login" element={<LoginPage />} />
+
+        <Route path="/register" element={<RegisterPage />} />
 
         <Route
           path="/tasks"
