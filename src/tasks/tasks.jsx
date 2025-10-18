@@ -142,7 +142,7 @@ export default function TaskList() {
       <div className="row">
         {filtered.map((task) => (
           <div className="col-md-4 mb-3" key={task.id}>
-            <TaskCard task={task} onUpdated={handleUpdated} onDelete={handleDelete} />
+            <TaskCard task={task} onUpdated={handleUpdated} onDelete={handleDelete} requiresLinkToPage />
           </div>
         ))}
         {filtered.length === 0 && <p className="text-muted">No tasks match your filters</p>}

@@ -1,5 +1,6 @@
 import "./App.css";
 import Tasks from "./tasks/tasks";
+import TaskPage from "./tasks/taskpage";
 import LoginPage from "./social/login";
 import RegisterPage from "./social/register";
 import { Routes, Route, Link, NavLink, useNavigate, Navigate } from "react-router-dom";
@@ -89,6 +90,58 @@ function Protected({ children }) {
   return user ? children : <Navigate to="/login" replace />;
 }
 
+function Footer() {
+  return (
+    <footer className="bg-dark text-light py-4 mt-auto border-top border-secondary">
+      <div className="container">
+        <div className="row align-items-center text-center text-md-start">
+          {/* Left Section */}
+          <div className="col-md-4 mb-3 mb-md-0">
+            <h5 className="fw-bold mb-1">TaskTracker</h5>
+            <small className="text-muted">
+              Manage your goals. Track your progress. Stay organized.
+            </small>
+          </div>
+
+          {/* Center Section */}
+          <div className="col-md-4 mb-3 mb-md-0 d-flex justify-content-center gap-3">
+            <a
+              href="https://github.com/"
+              className="text-light text-decoration-none"
+              target="_blank"
+              rel="noreferrer"
+            >
+              <i className="bi bi-github fs-4"></i>
+            </a>
+            <a
+              href="https://linkedin.com/"
+              className="text-light text-decoration-none"
+              target="_blank"
+              rel="noreferrer"
+            >
+              <i className="bi bi-linkedin fs-4"></i>
+            </a>
+            <a
+              href="mailto:hello@tasktracker.com"
+              className="text-light text-decoration-none"
+            >
+              <i className="bi bi-envelope fs-4"></i>
+            </a>
+          </div>
+
+          {/* Right Section */}
+          <div className="col-md-4 text-md-end">
+            <small>
+              © {new Date().getFullYear()} <strong>TaskTracker API</strong>. All rights reserved.
+            </small>
+          </div>
+        </div>
+      </div>
+    </footer>
+  );
+}
+
+
 function App() {
   const { hydrate, user, loading } = useAuth();
   const nav = useNavigate();
@@ -100,7 +153,6 @@ function App() {
     })();
   }, [hydrate]);
 
-  // If finished hydrating and not logged in, make sure URL is /login
   useEffect(() => {
 
   }, [loading, user, nav]);
@@ -117,6 +169,7 @@ function App() {
 
         <Route path="/register" element={<RegisterPage />} />
 
+     
         <Route
           path="/tasks"
           element={
@@ -125,7 +178,21 @@ function App() {
             </Protected>
           }
         />
+
+        <Route
+
+          path={`/task/:id`}
+          element={
+            <Protected>
+              <TaskPage/>
+            </Protected>
+          }
+        />
+   
       </Routes>
+    
+      <Footer />
+
     </div>
   );
 }

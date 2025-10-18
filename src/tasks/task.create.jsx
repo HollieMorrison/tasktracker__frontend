@@ -1,4 +1,3 @@
-// src/tasks/CreateTaskModal.jsx
 import { useState, useEffect } from "react";
 import { api } from "../api/client";
 
@@ -7,16 +6,13 @@ import { api } from "../api/client";
  * - show: boolean
  * - onClose: () => void
  * - onCreated: (task) => void  // called with the created task from server
- * - categories?: Array<{id:number, name:string}>
  */
-export default function CreateTaskModal({ show, onClose, onCreated, categories = [] }) {
+export default function CreateTaskModal({ show, onClose, onCreated }) {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [priority, setPriority] = useState(2); // Medium
   const [state, setState] = useState("open");
   const [dueLocal, setDueLocal] = useState(""); // yyyy-MM-ddTHH:mm for input type="datetime-local"
-  const [categoryId, setCategoryId] = useState("");
-  const [ownersCsv, setOwnersCsv] = useState(""); // optional: "2,5"
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
 
@@ -28,8 +24,6 @@ export default function CreateTaskModal({ show, onClose, onCreated, categories =
       setPriority(2);
       setState("open");
       setDueLocal("");
-      setCategoryId("");
-      setOwnersCsv("");
       setError("");
       setSubmitting(false);
     }
@@ -58,28 +52,16 @@ export default function CreateTaskModal({ show, onClose, onCreated, categories =
       description: description.trim() || undefined,
       priority: Number(priority),
       state,
-      // only send if provided
-      due_date: toISO(dueLocal) || undefined,
-      category: categoryId ? Number(categoryId) : undefined,
+      due_date: toISO(dueLocal) || undefined, // only send if provided
     };
-
-    // owners: parse comma-separated integers if provided
-    if (ownersCsv.trim()) {
-      const owners = ownersCsv
-        .split(",")
-        .map((s) => parseInt(s.trim(), 10))
-        .filter((n) => !Number.isNaN(n));
-      if (owners.length) payload.owners = owners;
-    }
 
     setSubmitting(true);
     setError("");
     try {
       const { data } = await api.post("/api/tasks/", payload);
-      onCreated?.(data); // update parent list immediately
+      onCreated?.(data);
       onClose?.();
     } catch (err) {
-      // Show DRF serializer errors as a simple string
       const msg =
         err?.response?.data
           ? JSON.stringify(err.response.data)
@@ -92,7 +74,6 @@ export default function CreateTaskModal({ show, onClose, onCreated, categories =
 
   if (!show) return null;
 
-  // Controlled Bootstrap-like modal (no jQuery required).
   return (
     <>
       <div className="modal show d-block" tabIndex="-1" role="dialog" aria-modal="true">
@@ -175,43 +156,6 @@ export default function CreateTaskModal({ show, onClose, onCreated, categories =
                       className="form-control"
                       value={dueLocal}
                       onChange={(e) => setDueLocal(e.target.value)}
-                    />
-                  </div>
-                </div>
-
-                <div className="row g-3 mt-1">
-                  <div className="col-md-6">
-                    <label className="form-label">Category</label>
-                    {categories?.length ? (
-                      <select
-                        className="form-select"
-                        value={categoryId}
-                        onChange={(e) => setCategoryId(e.target.value)}
-                      >
-                        <option value="">(none)</option>
-                        {categories.map((c) => (
-                          <option key={c.id} value={c.id}>
-                            {c.name}
-                          </option>
-                        ))}
-                      </select>
-                    ) : (
-                      <input
-                        className="form-control"
-                        placeholder="Category ID (optional)"
-                        value={categoryId}
-                        onChange={(e) => setCategoryId(e.target.value)}
-                      />
-                    )}
-                  </div>
-
-                  <div className="col-md-6">
-                    <label className="form-label">Owners (IDs, comma-separated)</label>
-                    <input
-                      className="form-control"
-                      placeholder="e.g., 2,5 (optional; current user added if empty)"
-                      value={ownersCsv}
-                      onChange={(e) => setOwnersCsv(e.target.value)}
                     />
                   </div>
                 </div>

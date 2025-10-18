@@ -8,8 +8,7 @@ export default function EditTaskModal({ show, task, onUpdated, onClose }) {
     title: "",
     description: "",
     priority: 2,
-    due_date: "",           // yyyy-MM-ddTHH:mm (for datetime-local)
-    category: "",
+    due_date: "", // yyyy-MM-ddTHH:mm (for datetime-local)
   });
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
@@ -23,7 +22,6 @@ export default function EditTaskModal({ show, task, onUpdated, onClose }) {
       description: task.description || "",
       priority: task.priority || 2,
       due_date: task.due_date ? task.due_date.slice(0, 16) : "",
-      category: task.category || ""
     });
     setError("");
     setSaving(false);
@@ -43,13 +41,10 @@ export default function EditTaskModal({ show, task, onUpdated, onClose }) {
   };
 
   const buildPayload = (extra = {}) => {
-
-
     return {
       title: form.title?.trim(),
       description: form.description?.trim(),
       priority: Number(form.priority),
-      category: form.category ? Number(form.category) : null,
       due_date: form.due_date ? new Date(form.due_date).toISOString() : null,
       ...extra,
     };
@@ -66,7 +61,9 @@ export default function EditTaskModal({ show, task, onUpdated, onClose }) {
       if (!extra.state) onClose?.(); // close on full save; keep open for quick state taps
     } catch (err) {
       const msg =
-        err?.response?.data ? JSON.stringify(err.response.data) : err?.message || "Failed to update task";
+        err?.response?.data
+          ? JSON.stringify(err.response.data)
+          : err?.message || "Failed to update task";
       setError(msg);
     } finally {
       setSaving(false);
@@ -112,7 +109,7 @@ export default function EditTaskModal({ show, task, onUpdated, onClose }) {
               </div>
 
               <div className="row g-3 mb-3">
-                <div className="col-md-4">
+                <div className="col-md-6">
                   <label className="form-label">Priority</label>
                   <select className="form-select" name="priority" value={form.priority} onChange={handleChange}>
                     {Object.entries(PRIORITY_LABELS).map(([val, label]) => (
@@ -121,7 +118,7 @@ export default function EditTaskModal({ show, task, onUpdated, onClose }) {
                   </select>
                 </div>
 
-                <div className="col-md-4">
+                <div className="col-md-6">
                   <label className="form-label">Due Date</label>
                   <input
                     type="datetime-local"
@@ -129,17 +126,6 @@ export default function EditTaskModal({ show, task, onUpdated, onClose }) {
                     name="due_date"
                     value={form.due_date}
                     onChange={handleChange}
-                  />
-                </div>
-
-                <div className="col-md-4">
-                  <label className="form-label">Category ID</label>
-                  <input
-                    className="form-control"
-                    name="category"
-                    value={form.category || ""}
-                    onChange={handleChange}
-                    placeholder="e.g., 1"
                   />
                 </div>
               </div>

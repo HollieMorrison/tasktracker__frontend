@@ -1,5 +1,6 @@
 import { useState } from "react";
 import EditTaskModal from "./task.edit";
+import { Link } from "react-router-dom";
 
 const PRIORITY_LABELS = { 1: "Low", 2: "Medium", 3: "High", 4: "Urgent" };
 
@@ -8,7 +9,7 @@ function humanState(s) {
   return s.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
 }
 
-export default function TaskCard({ task, onUpdated, onDelete }) {
+export default function TaskCard({ task, onUpdated, onDelete , requiresLinkToPage = false }) {
   const [showEdit, setShowEdit] = useState(false);
 
   return (
@@ -41,6 +42,7 @@ export default function TaskCard({ task, onUpdated, onDelete }) {
           </div>
 
           <div className="d-flex gap-2">
+
             <button className="btn btn-outline-primary btn-sm" onClick={() => setShowEdit(true)}>
               Edit
             </button>
@@ -54,6 +56,8 @@ export default function TaskCard({ task, onUpdated, onDelete }) {
         <div className="card-footer bg-white border-0 text-muted small">
           Created by {task.created_by__username} ·{" "}
           {task.created_at ? new Date(task.created_at).toLocaleDateString() : "—"}
+
+          { requiresLinkToPage && <Link to={{ pathname: `/task/${task.id}`}} > View Task </Link> }
         </div>
       </div>
 
