@@ -146,6 +146,51 @@ Example manual test:
 
 ---
 
+### Lighthouse Report
+
+The Lighthouse tool built into Google Chrome was used to test the site’s overall performance, accessibility, and SEO on both mobile and desktop devices.
+
+#### Mobile Analysis
+<details>
+<summary>Dashboard Page</summary>
+
+![Dashboard Lighthouse Mobile](./assets/readme/lighthouse-dashboard-mobile.png)
+</details>
+<details>
+<summary>Login Page</summary>
+
+![Login Lighthouse Mobile](./assets/readme/lighthouse-login-mobile.png)
+</details>
+<details>
+<summary>Register Page</summary>
+
+![Register Lighthouse Mobile](./assets/readme/lighthouse-register-mobile.png)
+</details>
+
+#### Desktop Analysis
+<details>
+<summary>Dashboard Page</summary>
+
+![Dashboard Lighthouse Desktop](./assets/readme/lighthouse-dashboard-desktop.png)
+</details>
+<details>
+<summary>Login Page</summary>
+
+![Login Lighthouse Desktop](./assets/readme/lighthouse-login-desktop.png)
+</details>
+<details>
+<summary>Register Page</summary>
+
+![Register Lighthouse Desktop](./assets/readme/lighthouse-register-desktop.png)
+</details>
+
+Each report confirmed:
+- Consistent performance across devices.  
+- Strong accessibility standards (color contrast and ARIA usage).  
+- High best practice and SEO scores.  
+- Fast page load and responsive layout.
+
+
 ## Deployment and Local Setup
 
 ### Running Locally
