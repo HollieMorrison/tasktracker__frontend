@@ -1,31 +1,227 @@
+# Task Tracker Frontend
 
-# the auth strategy
-I had to figure the auth strategy for react -> django server because both are now decoupled. 
-before django rendered the frontend so exposed the authed user into the template wheras now our frontend only communicates via api calls. 
+**Task Tracker Frontend** is a responsive web application built with React.  
+It connects to the Task Tracker API to allow users to register, log in, and manage their daily tasks through an intuitive and visually clear interface.  
 
-i decided on JWT.
+The interface provides real-time interaction, state management with Zustand, and a clean Bootstrap layout to keep the user experience simple and accessible on all devices.
 
-[x] query our backend server and hit the superuser/tasks endpoint
-[x] get bootstrap working correctly
-[x] get react router working correctly
-[x] create a task component
+![Task Tracker Screenshot](./assets/readme/frontend-preview.png)  
+[View Task Tracker Frontend Repository on GitHub](https://github.com/HollieMorrison/tasktracker__frontend)
 
-[x] create a user global context using zustand.
-[x] login requests gets back generated token and handle this in storage
-[x] auth checks and page protection
-[x] display tasks for that user
-[x] user component that shows name , email and ability to sign out
-[x] tasks filtering and status ability
-
-[] ability to create new tasks
-[] ability to delete existing tasks.
 ---
 
+## Table of Contents
+
+### [User Experience (UX)](#user-experience-ux-1)
+* [User Goals](#user-goals)
+### [Features](#features)
+* [Implemented Features](#implemented-features)
+### [Future Enhancements](#future-enhancements)
+### [Design](#design-1)
+### [Technologies Used](#technologies-used-1)
+### [Frameworks, Libraries & Tools](#frameworks-libraries--tools-1)
+### [Testing](#testing-1)
+* [Manual Testing](#manual-testing)
+### [Deployment and Local Setup](#deployment-and-local-setup-1)
+* [Running Locally](#running-locally)
+* [Connecting to Backend](#connecting-to-backend)
+* [Deployment Steps](#deployment-steps)
+### [Credits](#credits-1)
+### [Acknowledgements](#acknowledgements-1)
+
+---
+
+## User Experience (UX)
+
+The Task Tracker frontend was built with the goal of keeping users productive without overwhelming them.  
+It provides a minimal and clean interface to manage tasks, paired with a responsive layout for both desktop and mobile screens.
+
+Users can:
+- Register and log in securely.  
+- Create, update, and delete their tasks.  
+- View all their active tasks in an organised dashboard.  
+- Log out safely when finished.  
+
+### User Goals
+
+*As a user of Task Tracker, I want to:*
+- Easily sign up and manage my account.  
+- Add new tasks quickly with minimal clicks.  
+- Mark tasks as complete or update them when needed.  
+- Navigate the app smoothly across all devices.  
+
+---
+
+## Features
+
+### Implemented Features
+
+- **User Authentication:**  
+  Frontend integrates with the backend API for registration, login, logout, and token refresh.
+
+- **Task Management Dashboard:**  
+  View, create, edit, and delete tasks dynamically without page reloads.
+
+- **State Management with Zustand:**  
+  Lightweight state control for global data such as authentication and task lists.
+
+- **Responsive Design:**  
+  Built with Bootstrap 5 to ensure mobile, tablet, and desktop usability.
+
+- **Error Handling:**  
+  Displays clear messages for failed logins, network issues, or invalid input.
+
+- **API Integration with Axios:**  
+  Uses Axios for clean and consistent HTTP requests.
+
+Example flow:
+1. User logs in → receives JWT tokens from backend.  
+2. Tokens are stored in local state.  
+3. User can then create or edit tasks through the dashboard UI.  
+
+---
+
+### Future Enhancements
+
+- Add task filters or search functionality.  
+- Implement task sorting (by date, status, or priority).  
+- Add user profile editing page.  
+- Include dark/light mode themes.  
+
+---
+
+## Design
+
+- Clean, minimal layout using Bootstrap’s grid system.  
+- Card-based task display for easy readability.  
+- Consistent color scheme and large buttons for accessibility.  
+- Uses React Router for smooth page navigation (login, register, dashboard).  
+
+---
+
+## Technologies Used
+
+- [React 19](https://react.dev/)  
+- [JavaScript (ES6+)](https://developer.mozilla.org/en-US/docs/Web/JavaScript)  
+- [Bootstrap 5](https://getbootstrap.com/)  
+- [Axios](https://axios-http.com/)  
+- [Zustand](https://github.com/pmndrs/zustand)  
+- [React Router DOM](https://reactrouter.com/)  
+
+---
+
+## Frameworks, Libraries & Tools
+
+- [GitHub](https://github.com/) — version control and hosting.  
+- [Visual Studio Code](https://code.visualstudio.com/) — development environment.  
+- [Render / Netlify / Vercel](https://vercel.com/) — for deployment.  
+- [ESLint](https://eslint.org/) — for code quality checks.  
+- [Postman](https://www.postman.com/) — for backend endpoint testing during development.  
+
+---
+
+## Testing
+
+### Manual Testing
+
+The frontend was manually tested to confirm:
+- Smooth navigation between pages.  
+- Correct form validation on register/login.  
+- Accurate API communication for CRUD operations.  
+- Proper handling of invalid or expired tokens.  
+- Responsiveness across devices (tested on desktop and mobile).  
+
+Browsers tested:
+- Google Chrome  
+- Microsoft Edge  
+- Mozilla Firefox  
+- Samsung Internet (mobile)  
+
+Example manual test:
+1. Register a new user — confirm redirect to login page.  
+2. Login and confirm access to dashboard.  
+3. Create a new task and verify it appears instantly.  
+4. Edit and delete tasks — confirm changes reflected in the UI.  
+5. Logout — ensure tokens are cleared and redirected to login page.  
+
+---
+
+## Deployment and Local Setup
+
+### Running Locally
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/HollieMorrison/tasktracker__frontend.git
+
+Move into the project folder:
+
+cd tasktracker__frontend
 
 
+Install dependencies:
 
-# how to login / register / auth with our server
-# create ui for login / register / user profile
-# using react-router for pages - setup the auth flow / user task area and auth restriction. 
-# fetch / create / edit / delete tasks via signed in user.
+npm install
 
+
+Create an environment file .env in the root directory with:
+
+VITE_API_BASE_URL=http://127.0.0.1:8000/api
+
+
+Start the local development server:
+
+npm run dev
+
+
+Open http://localhost:5173/
+ in your browser.
+
+Connecting to Backend
+
+The frontend communicates with the backend API located at:
+
+http://127.0.0.1:8000/api
+
+
+Ensure the Task Tracker Backend is running before launching the frontend.
+You can adjust the API base URL in the .env file if deployed to another domain.
+
+Deployment Steps
+
+The project can be deployed easily using services like Netlify, Vercel, or Render.
+
+For Vercel:
+
+Log in to Vercel
+.
+
+Import your GitHub repository.
+
+Add the environment variable:
+
+VITE_API_BASE_URL=https://your-backend-url/api
+
+
+Click Deploy — the app will build automatically and be available at a live URL.
+
+Credits
+Code References
+
+React documentation for hooks and routing concepts.
+
+Axios and Zustand docs for request and state management patterns.
+
+Bootstrap for layout and responsive design utilities.
+
+Content
+
+Interface text and design decisions created by the project developer, Hollie Morrison.
+
+Acknowledgements
+
+Mentors and peers who provided design and usability feedback.
+
+Online React and Django communities for open-source learning resources.
+
+Friends and testers who helped identify UI improvements.
