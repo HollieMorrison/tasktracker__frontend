@@ -146,6 +146,14 @@ Example manual test:
 4. Edit and delete tasks — confirm changes reflected in the UI.  
 5. Logout — ensure tokens are cleared and redirected to login page.  
 
+Ive tested some results and they are shown here : 
+
+![Create task](./media/Testing%20task%20creation.png)
+![Edit task](./media/edit-task.png)
+![Delete task](./media/delete-task-warning.png)
+![Home page](./media/tasktracker-home.png)
+![Colour change for overdue tasks](./media/task-overdue-vs-not-overdue.png)
+
 ---
 
 ### Lighthouse Report
