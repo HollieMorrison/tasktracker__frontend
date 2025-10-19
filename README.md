@@ -5,7 +5,7 @@ It connects to the Task Tracker API to allow users to register, log in, and mana
 
 The interface provides real-time interaction, state management with Zustand, and a clean Bootstrap layout to keep the user experience simple and accessible on all devices.
 
-![Task Tracker Screenshot](./assets/readme/frontend-preview.png)  
+![Task Tracker Screenshot](./media/am-i-responsive.png)  
 [View Task Tracker Frontend Repository on GitHub](https://github.com/HollieMorrison/tasktracker__frontend)
 
 ---
