@@ -10,6 +10,9 @@ The interface provides real-time interaction, state management with Zustand, and
 
 ---
 
+
+
+
 ## Table of Contents
 
 ### [User Experience (UX)](#user-experience-ux-1)
@@ -114,9 +117,8 @@ Example flow:
 
 - [GitHub](https://github.com/) — version control and hosting.  
 - [Visual Studio Code](https://code.visualstudio.com/) — development environment.  
-- [Render / Netlify / Vercel](https://vercel.com/) — for deployment.  
-- [ESLint](https://eslint.org/) — for code quality checks.  
-- [Postman](https://www.postman.com/) — for backend endpoint testing during development.  
+- [Heroku] — for deployment.  
+- [ESLint](https://eslint.org/) — for code quality checks.   
 
 ---
 
@@ -208,19 +210,7 @@ Install dependencies:
 
 npm install
 
-
-Create an environment file .env in the root directory with:
-
-VITE_API_BASE_URL=http://127.0.0.1:8000/api
-
-
-Start the local development server:
-
-npm run dev
-
-
-Open http://localhost:5173/
- in your browser.
+VITE_API_BASE_URL= 
 
 Connecting to Backend
 
@@ -232,23 +222,6 @@ http://127.0.0.1:8000/api
 Ensure the Task Tracker Backend is running before launching the frontend.
 You can adjust the API base URL in the .env file if deployed to another domain.
 
-Deployment Steps
-
-The project can be deployed easily using services like Netlify, Vercel, or Render.
-
-For Vercel:
-
-Log in to Vercel
-.
-
-Import your GitHub repository.
-
-Add the environment variable:
-
-VITE_API_BASE_URL=https://your-backend-url/api
-
-
-Click Deploy — the app will build automatically and be available at a live URL.
 
 Credits
 Code References
