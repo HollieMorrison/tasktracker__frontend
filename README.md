@@ -164,34 +164,34 @@ The Lighthouse tool built into Google Chrome was used to test the site’s overa
 <details>
 <summary>Dashboard Page</summary>
 
-![Dashboard Lighthouse Mobile](./assets/readme/lighthouse-dashboard-mobile.png)
+![Dashboard Lighthouse Mobile](./media/homepage-mobile-lighthouse-results.png)
 </details>
 <details>
 <summary>Login Page</summary>
 
-![Login Lighthouse Mobile](./assets/readme/lighthouse-login-mobile.png)
+![Login Lighthouse Mobile](./media/login-page-mobile-lighthouse-results.png)
 </details>
 <details>
 <summary>Register Page</summary>
 
-![Register Lighthouse Mobile](./assets/readme/lighthouse-register-mobile.png)
+![Register Lighthouse Mobile](./media/register-page-mobile-lighthouse-results.png)
 </details>
 
 #### Desktop Analysis
 <details>
 <summary>Dashboard Page</summary>
 
-![Dashboard Lighthouse Desktop](./assets/readme/lighthouse-dashboard-desktop.png)
+![Dashboard Lighthouse Desktop](./media/homepage-desktop-lighthouse-results.png)
 </details>
 <details>
 <summary>Login Page</summary>
 
-![Login Lighthouse Desktop](./assets/readme/lighthouse-login-desktop.png)
+![Login Lighthouse Desktop](./media/login-page-desktop-lighthouse-results.png)
 </details>
 <details>
 <summary>Register Page</summary>
 
-![Register Lighthouse Desktop](./assets/readme/lighthouse-register-desktop.png)
+![Register Lighthouse Desktop](./media/register-page-desktop-lighthouse-results.png)
 </details>
 
 Each report confirmed:
