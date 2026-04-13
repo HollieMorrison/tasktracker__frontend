@@ -48,7 +48,7 @@ export const useAuth = create((set, get) => ({
   },
 
   logout: async () => {
-    try { await api.post("/user/logout/"); } catch {}
+    try { await api.post("/user/logout/"); } catch (error) { console.error(error); }
     clearRefresh();
     setAuth(null);
     set({ user: null, access: null });
