@@ -29,7 +29,7 @@ export default function RegisterPage() {
     setError("");
 
     try {
-      const { data } = await api.post("/user/register/", form);
+      await api.post("/user/register/", form);
       await login(form.username, form.password);
       // Save tokens + user in auth store
       nav("/tasks", { replace: true });
