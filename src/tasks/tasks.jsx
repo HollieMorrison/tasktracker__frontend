@@ -1,16 +1,49 @@
 import { useMemo, useState } from "react";
-import { Button, Card, Col, Form, Row, Badge } from "react-bootstrap";
-import { toast } from "react-toastify";
+import { Button, Col, Form, Row } from "react-bootstrap";
+import { FaCalendarAlt, FaCheckCircle, FaClipboardList, FaExclamationTriangle } from "react-icons/fa";
 import useTaskStore from "../store/tasks.jsx";
 
-const SummaryCard = ({ title, value }) => (
-  <Card className="shadow-sm border-0 rounded-4 h-100">
-    <Card.Body>
-      <p className="text-muted mb-1">{title}</p>
-      <h3 className="mb-0 fw-bold">{value}</h3>
-    </Card.Body>
-  </Card>
-);
+const formatDate = (value) => {
+  if (!value) return "No due date";
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return "No due date";
+  return date.toLocaleDateString();
+};
+
+const isOverdue = (dueDate, status) => {
+  if (!dueDate || String(status).toLowerCase() === "done") return false;
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const date = new Date(dueDate);
+  date.setHours(0, 0, 0, 0);
+  return date < today;
+};
+
+const getPriorityClass = (priority) => {
+  switch (String(priority || "").toLowerCase()) {
+    case "high":
+      return "badge-soft badge-priority-high";
+    case "medium":
+      return "badge-soft badge-priority-medium";
+    case "low":
+      return "badge-soft badge-priority-low";
+    default:
+      return "badge-soft badge-status-todo";
+  }
+};
+
+const getStatusClass = (status) => {
+  switch (String(status || "").toLowerCase()) {
+    case "done":
+      return "badge-soft badge-status-done";
+    case "in progress":
+      return "badge-soft badge-status-progress";
+    case "todo":
+      return "badge-soft badge-status-todo";
+    default:
+      return "badge-soft badge-status-todo";
+  }
+};
 
 const TasksPage = () => {
   const tasks = useTaskStore((state) => state.tasks || []);
@@ -19,154 +52,193 @@ const TasksPage = () => {
 
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
+  const [priorityFilter, setPriorityFilter] = useState("all");
 
   const filteredTasks = useMemo(() => {
     let result = [...tasks];
 
     if (searchTerm.trim()) {
+      const query = searchTerm.toLowerCase();
       result = result.filter((task) =>
-        (task.title || "").toLowerCase().includes(searchTerm.toLowerCase())
+        `${task.title || ""} ${task.description || ""}`.toLowerCase().includes(query)
       );
     }
 
     if (statusFilter !== "all") {
       result = result.filter(
-        (task) => (task.status || "").toLowerCase() === statusFilter
+        (task) => String(task.status || "").toLowerCase() === statusFilter
+      );
+    }
+
+    if (priorityFilter !== "all") {
+      result = result.filter(
+        (task) => String(task.priority || "").toLowerCase() === priorityFilter
       );
     }
 
     return result;
-  }, [tasks, searchTerm, statusFilter]);
+  }, [tasks, searchTerm, statusFilter, priorityFilter]);
 
-  const completedCount = tasks.filter(
-    (task) => (task.status || "").toLowerCase() === "done"
+  const totalTasks = tasks.length;
+  const completedTasks = tasks.filter(
+    (task) => String(task.status || "").toLowerCase() === "done"
+  ).length;
+  const inProgressTasks = tasks.filter(
+    (task) => String(task.status || "").toLowerCase() === "in progress"
+  ).length;
+  const overdueTasks = tasks.filter((task) =>
+    isOverdue(task.due_date, task.status)
   ).length;
 
-  const handleDelete = async (task) => {
-    try {
-      if (deleteTask) {
-        await deleteTask(task.id);
-      }
-      toast.success("Task deleted");
-    } catch (error) {
-      console.error(error);
-      toast.error("Could not delete task");
+  const handleDelete = async (taskId) => {
+    if (deleteTask) {
+      await deleteTask(taskId);
     }
   };
 
   const handleComplete = async (task) => {
-    try {
-      if (updateTask) {
-        await updateTask(task.id, { ...task, status: "done" });
-      }
-      toast.success("Task completed");
-    } catch (error) {
-      console.error(error);
-      toast.error("Could not update task");
+    if (updateTask) {
+      await updateTask(task.id, { ...task, status: "done" });
     }
   };
 
   return (
-    <div className="container py-4">
-      <div className="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-3">
+    <div className="container py-4 page-shell">
+      <div className="page-header">
         <div>
-          <h1 className="fw-bold mb-1">My Tasks</h1>
-          <p className="text-muted mb-0">
-            Stay organised and manage your workload.
+          <h1 className="page-title">Task Dashboard</h1>
+          <p className="page-subtitle">
+            Organise priorities, stay on top of deadlines, and track your progress.
           </p>
         </div>
 
         <Button variant="primary">+ Add Task</Button>
       </div>
 
-      <Row className="g-3 mb-4">
-        <Col md={6} xl={3}>
-          <SummaryCard title="Total Tasks" value={tasks.length} />
-        </Col>
-        <Col md={6} xl={3}>
-          <SummaryCard title="Completed" value={completedCount} />
-        </Col>
-      </Row>
+      <div className="summary-grid">
+        <div className="summary-card">
+          <div className="summary-label">Total Tasks</div>
+          <p className="summary-value">{totalTasks}</p>
+        </div>
 
-      <Card className="shadow-sm border-0 rounded-4 mb-4">
-        <Card.Body>
-          <Row className="g-3">
-            <Col md={8}>
-              <Form.Control
-                type="text"
-                placeholder="Search tasks..."
-                value={searchTerm}
-                onChange={(event) => setSearchTerm(event.target.value)}
-              />
-            </Col>
+        <div className="summary-card">
+          <div className="summary-label">Completed</div>
+          <p className="summary-value">{completedTasks}</p>
+        </div>
 
-            <Col md={4}>
-              <Form.Select
-                value={statusFilter}
-                onChange={(event) => setStatusFilter(event.target.value)}
-              >
-                <option value="all">All Tasks</option>
-                <option value="todo">To Do</option>
-                <option value="in progress">In Progress</option>
-                <option value="done">Done</option>
-              </Form.Select>
-            </Col>
-          </Row>
-        </Card.Body>
-      </Card>
+        <div className="summary-card">
+          <div className="summary-label">In Progress</div>
+          <p className="summary-value">{inProgressTasks}</p>
+        </div>
+
+        <div className="summary-card">
+          <div className="summary-label">Overdue</div>
+          <p className="summary-value">{overdueTasks}</p>
+        </div>
+      </div>
+
+      <div className="task-toolbar">
+        <Row className="g-3">
+          <Col md={6}>
+            <Form.Control
+              type="text"
+              placeholder="Search tasks..."
+              value={searchTerm}
+              onChange={(event) => setSearchTerm(event.target.value)}
+            />
+          </Col>
+
+          <Col md={3}>
+            <Form.Select
+              value={statusFilter}
+              onChange={(event) => setStatusFilter(event.target.value)}
+            >
+              <option value="all">All statuses</option>
+              <option value="todo">To Do</option>
+              <option value="in progress">In Progress</option>
+              <option value="done">Done</option>
+            </Form.Select>
+          </Col>
+
+          <Col md={3}>
+            <Form.Select
+              value={priorityFilter}
+              onChange={(event) => setPriorityFilter(event.target.value)}
+            >
+              <option value="all">All priorities</option>
+              <option value="high">High</option>
+              <option value="medium">Medium</option>
+              <option value="low">Low</option>
+            </Form.Select>
+          </Col>
+        </Row>
+      </div>
 
       {filteredTasks.length === 0 ? (
-        <Card className="shadow-sm border-0 rounded-4">
-          <Card.Body className="text-center py-5">
-            <h3 className="fw-bold">No tasks found</h3>
-            <p className="text-muted mb-0">
-              Try changing your filters or create a new task.
-            </p>
-          </Card.Body>
-        </Card>
+        <div className="empty-state">
+          <h3>No tasks found</h3>
+          <p>Create a task or change your filters to see more results.</p>
+        </div>
       ) : (
         filteredTasks.map((task) => (
-          <Card key={task.id} className="shadow-sm border-0 rounded-4 mb-3">
-            <Card.Body>
-              <div className="d-flex flex-column flex-lg-row justify-content-between gap-3">
-                <div className="flex-grow-1">
-                  <div className="d-flex align-items-center gap-2 flex-wrap mb-2">
-                    <h5 className="mb-0 fw-semibold">{task.title}</h5>
+          <div key={task.id} className="task-item-card">
+            <div className="d-flex flex-column flex-lg-row justify-content-between gap-3">
+              <div className="flex-grow-1">
+                <div className="d-flex flex-wrap align-items-center gap-2 mb-2">
+                  <h3 className="task-title">{task.title}</h3>
 
-                    {task.status && (
-                      <Badge bg={task.status === "done" ? "success" : "secondary"}>
-                        {task.status}
-                      </Badge>
-                    )}
-                  </div>
+                  {task.priority && (
+                    <span className={getPriorityClass(task.priority)}>
+                      <FaExclamationTriangle />
+                      {task.priority}
+                    </span>
+                  )}
 
-                  {task.description && (
-                    <p className="text-muted mb-2">{task.description}</p>
+                  {task.status && (
+                    <span className={getStatusClass(task.status)}>
+                      <FaCheckCircle />
+                      {task.status}
+                    </span>
                   )}
                 </div>
 
-                <div className="d-flex gap-2 align-self-start">
-                  {(task.status || "").toLowerCase() !== "done" && (
-                    <Button
-                      variant="outline-success"
-                      size="sm"
-                      onClick={() => handleComplete(task)}
-                    >
-                      Done
-                    </Button>
-                  )}
+                {task.description && (
+                  <p className="task-meta mb-2">{task.description}</p>
+                )}
 
-                  <Button
-                    variant="outline-danger"
-                    size="sm"
-                    onClick={() => handleDelete(task)}
-                  >
-                    Delete
-                  </Button>
+                <div className="task-meta d-flex flex-wrap gap-3">
+                  <span>
+                    <FaCalendarAlt className="me-2" />
+                    {formatDate(task.due_date)}
+                  </span>
+
+                  {isOverdue(task.due_date, task.status) && (
+                    <span className="text-danger fw-semibold">Overdue</span>
+                  )}
                 </div>
               </div>
-            </Card.Body>
-          </Card>
+
+              <div className="d-flex gap-2 align-self-start">
+                {String(task.status || "").toLowerCase() !== "done" && (
+                  <Button
+                    variant="outline-success"
+                    size="sm"
+                    onClick={() => handleComplete(task)}
+                  >
+                    Complete
+                  </Button>
+                )}
+
+                <Button
+                  variant="outline-danger"
+                  size="sm"
+                  onClick={() => handleDelete(task.id)}
+                >
+                  Delete
+                </Button>
+              </div>
+            </div>
+          </div>
         ))
       )}
     </div>
