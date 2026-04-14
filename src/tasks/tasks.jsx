@@ -1,6 +1,12 @@
+import { useNavigate } from "react-router-dom";
 import { useMemo, useState } from "react";
 import { Button, Col, Form, Row } from "react-bootstrap";
-import { FaCalendarAlt, FaCheckCircle, FaClipboardList, FaExclamationTriangle } from "react-icons/fa";
+import {
+  FaCalendarAlt,
+  FaCheckCircle,
+  FaClipboardList,
+  FaExclamationTriangle,
+} from "react-icons/fa";
 import useTaskStore from "../store/tasks.jsx";
 
 const formatDate = (value) => {
@@ -46,6 +52,8 @@ const getStatusClass = (status) => {
 };
 
 const TasksPage = () => {
+  const navigate = useNavigate();
+
   const tasks = useTaskStore((state) => state.tasks || []);
   const deleteTask = useTaskStore((state) => state.deleteTask);
   const updateTask = useTaskStore((state) => state.updateTask);
@@ -60,7 +68,9 @@ const TasksPage = () => {
     if (searchTerm.trim()) {
       const query = searchTerm.toLowerCase();
       result = result.filter((task) =>
-        `${task.title || ""} ${task.description || ""}`.toLowerCase().includes(query)
+        `${task.title || ""} ${task.description || ""}`
+          .toLowerCase()
+          .includes(query)
       );
     }
 
@@ -108,11 +118,14 @@ const TasksPage = () => {
         <div>
           <h1 className="page-title">Task Dashboard</h1>
           <p className="page-subtitle">
-            Organise priorities, stay on top of deadlines, and track your progress.
+            Organise priorities, stay on top of deadlines, and track your
+            progress.
           </p>
         </div>
 
-        <Button variant="primary">+ Add Task</Button>
+        <Button variant="primary" onClick={() => navigate("/tasks/create")}>
+          + Add Task
+        </Button>
       </div>
 
       <div className="summary-grid">
@@ -176,6 +189,7 @@ const TasksPage = () => {
 
       {filteredTasks.length === 0 ? (
         <div className="empty-state">
+          <FaClipboardList className="mb-3" size={36} />
           <h3>No tasks found</h3>
           <p>Create a task or change your filters to see more results.</p>
         </div>
