@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Button, Col, Form, Row } from "react-bootstrap";
 import {
   FaCalendarAlt,
@@ -55,12 +55,19 @@ const TasksPage = () => {
   const navigate = useNavigate();
 
   const tasks = useTaskStore((state) => state.tasks || []);
+  const fetchTasks = useTaskStore((state) => state.fetchTasks);
   const deleteTask = useTaskStore((state) => state.deleteTask);
   const updateTask = useTaskStore((state) => state.updateTask);
 
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [priorityFilter, setPriorityFilter] = useState("all");
+
+  useEffect(() => {
+    if (fetchTasks) {
+      fetchTasks();
+    }
+  }, [fetchTasks]);
 
   const filteredTasks = useMemo(() => {
     let result = [...tasks];
