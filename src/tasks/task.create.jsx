@@ -1,47 +1,21 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { api } from "../api/client";
 
-/**
- * Props:
- * - show: boolean
- * - onClose: () => void
- * - onCreated: (task) => void  // called with the created task from server
- */
-export default function CreateTaskModal({ show, onClose, onCreated }) {
+export default function TaskCreate() {
+  const navigate = useNavigate();
+
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [priority, setPriority] = useState(2); // Medium
-  const [state, setState] = useState("open");
-  const [dueLocal, setDueLocal] = useState(""); // yyyy-MM-ddTHH:mm for input type="datetime-local"
+  const [priority, setPriority] = useState("medium");
+  const [status, setStatus] = useState("todo");
+  const [dueDate, setDueDate] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
 
-  // Reset form whenever modal opens
-  useEffect(() => {
-    if (show) {
-      setTitle("");
-      setDescription("");
-      setPriority(2);
-      setState("open");
-      setDueLocal("");
-      setError("");
-      setSubmitting(false);
-    }
-  }, [show]);
+  async function handleSubmit(event) {
+    event.preventDefault();
 
-  function toISO(dtLocal) {
-    // dtLocal expected like "2025-10-01T18:00"
-    if (!dtLocal) return null;
-    try {
-      const d = new Date(dtLocal);
-      return d.toISOString();
-    } catch {
-      return null;
-    }
-  }
-
-  async function handleSubmit(e) {
-    e.preventDefault();
     if (!title.trim()) {
       setError("Title is required.");
       return;
@@ -49,138 +23,125 @@ export default function CreateTaskModal({ show, onClose, onCreated }) {
 
     const payload = {
       title: title.trim(),
-      description: description.trim() || undefined,
-      priority: Number(priority),
-      state,
-      due_date: toISO(dueLocal) || undefined, // only send if provided
+      description: description.trim(),
+      priority,
+      status,
+      due_date: dueDate || null,
     };
 
     setSubmitting(true);
     setError("");
+
     try {
-      const { data } = await api.post("/api/tasks/", payload);
-      onCreated?.(data);
-      onClose?.();
+      await api.post("/api/tasks/", payload);
+      navigate("/tasks");
     } catch (err) {
-      const msg =
-        err?.response?.data
-          ? JSON.stringify(err.response.data)
-          : err?.message || "Failed to create task";
-      setError(msg);
+      const message =
+        err?.response?.data?.detail ||
+        err?.response?.data?.message ||
+        "Failed to create task.";
+      setError(message);
     } finally {
       setSubmitting(false);
     }
   }
 
-  if (!show) return null;
-
   return (
-    <>
-      <div className="modal show d-block" tabIndex="-1" role="dialog" aria-modal="true">
-        <div className="modal-dialog modal-lg" role="document">
-          <div className="modal-content">
-            <form onSubmit={handleSubmit}>
-              <div className="modal-header">
-                <h5 className="modal-title">Create Task</h5>
-                <button
-                  type="button"
-                  className="btn-close"
-                  aria-label="Close"
-                  onClick={onClose}
-                  disabled={submitting}
-                />
-              </div>
-
-              <div className="modal-body">
-                {error && (
-                  <div className="alert alert-danger" role="alert">
-                    {error}
-                  </div>
-                )}
-
-                <div className="mb-3">
-                  <label className="form-label">Title *</label>
-                  <input
-                    className="form-control"
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value)}
-                    placeholder="e.g., Finish onboarding docs"
-                    required
-                  />
-                </div>
-
-                <div className="mb-3">
-                  <label className="form-label">Description</label>
-                  <textarea
-                    className="form-control"
-                    rows={3}
-                    value={description}
-                    onChange={(e) => setDescription(e.target.value)}
-                    placeholder="Optional details…"
-                  />
-                </div>
-
-                <div className="row g-3">
-                  <div className="col-md-4">
-                    <label className="form-label">Priority</label>
-                    <select
-                      className="form-select"
-                      value={priority}
-                      onChange={(e) => setPriority(e.target.value)}
-                    >
-                      <option value="4">Urgent</option>
-                      <option value="3">High</option>
-                      <option value="2">Medium</option>
-                      <option value="1">Low</option>
-                    </select>
-                  </div>
-
-                  <div className="col-md-4">
-                    <label className="form-label">State</label>
-                    <select
-                      className="form-select"
-                      value={state}
-                      onChange={(e) => setState(e.target.value)}
-                    >
-                      <option value="open">Open</option>
-                      <option value="in_progress">In progress</option>
-                      <option value="done">Done</option>
-                      <option value="cancelled">Cancelled</option>
-                    </select>
-                  </div>
-
-                  <div className="col-md-4">
-                    <label className="form-label">Due date</label>
-                    <input
-                      type="datetime-local"
-                      className="form-control"
-                      value={dueLocal}
-                      onChange={(e) => setDueLocal(e.target.value)}
-                    />
-                  </div>
-                </div>
-              </div>
-
-              <div className="modal-footer">
-                <button
-                  type="button"
-                  className="btn btn-outline-secondary"
-                  onClick={onClose}
-                  disabled={submitting}
-                >
-                  Cancel
-                </button>
-                <button type="submit" className="btn btn-primary" disabled={submitting}>
-                  {submitting ? "Creating…" : "Create Task"}
-                </button>
-              </div>
-            </form>
-          </div>
+    <div className="container py-4 page-shell">
+      <div className="page-header">
+        <div>
+          <h1 className="page-title">Create Task</h1>
+          <p className="page-subtitle">
+            Add a new task, set its priority, and plan your deadline.
+          </p>
         </div>
       </div>
 
-      {/* Backdrop */}
-      <div className="modal-backdrop fade show"></div>
-    </>
+      <div className="auth-card task-panel">
+        <form onSubmit={handleSubmit}>
+          {error && (
+            <div className="alert alert-danger" role="alert">
+              {error}
+            </div>
+          )}
+
+          <div className="mb-3">
+            <label className="form-label fw-semibold">Title *</label>
+            <input
+              type="text"
+              className="form-control"
+              value={title}
+              onChange={(event) => setTitle(event.target.value)}
+              placeholder="Enter task title"
+              required
+            />
+          </div>
+
+          <div className="mb-3">
+            <label className="form-label fw-semibold">Description</label>
+            <textarea
+              className="form-control"
+              rows="4"
+              value={description}
+              onChange={(event) => setDescription(event.target.value)}
+              placeholder="Add details about this task"
+            />
+          </div>
+
+          <div className="row g-3">
+            <div className="col-md-4">
+              <label className="form-label fw-semibold">Priority</label>
+              <select
+                className="form-select"
+                value={priority}
+                onChange={(event) => setPriority(event.target.value)}
+              >
+                <option value="high">High</option>
+                <option value="medium">Medium</option>
+                <option value="low">Low</option>
+              </select>
+            </div>
+
+            <div className="col-md-4">
+              <label className="form-label fw-semibold">Status</label>
+              <select
+                className="form-select"
+                value={status}
+                onChange={(event) => setStatus(event.target.value)}
+              >
+                <option value="todo">To Do</option>
+                <option value="in progress">In Progress</option>
+                <option value="done">Done</option>
+              </select>
+            </div>
+
+            <div className="col-md-4">
+              <label className="form-label fw-semibold">Due Date</label>
+              <input
+                type="date"
+                className="form-control"
+                value={dueDate}
+                onChange={(event) => setDueDate(event.target.value)}
+              />
+            </div>
+          </div>
+
+          <div className="d-flex gap-2 mt-4">
+            <button
+              type="button"
+              className="btn btn-outline-secondary"
+              onClick={() => navigate("/tasks")}
+              disabled={submitting}
+            >
+              Cancel
+            </button>
+
+            <button type="submit" className="btn btn-primary" disabled={submitting}>
+              {submitting ? "Creating..." : "Create Task"}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
   );
 }
