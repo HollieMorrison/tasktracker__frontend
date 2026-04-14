@@ -2,6 +2,27 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { api } from "../api/client";
 
+const priorityMap = {
+  low: 1,
+  medium: 2,
+  high: 3,
+  urgent: 4,
+};
+
+const stateMap = {
+  todo: "open",
+  "in progress": "in_progress",
+  done: "done",
+  cancelled: "cancelled",
+};
+
+function toISODateEndOfDay(value) {
+  if (!value) return null;
+  const date = new Date(`${value}T23:59:00`);
+  if (Number.isNaN(date.getTime())) return null;
+  return date.toISOString();
+}
+
 export default function TaskCreate() {
   const navigate = useNavigate();
 
@@ -23,23 +44,25 @@ export default function TaskCreate() {
 
     const payload = {
       title: title.trim(),
-      description: description.trim(),
-      priority,
-      status,
-      due_date: dueDate || null,
+      description: description.trim() || "",
+      priority: priorityMap[priority],
+      state: stateMap[status],
+      due_date: dueDate ? toISODateEndOfDay(dueDate) : null,
     };
 
     setSubmitting(true);
     setError("");
 
     try {
-      await api.post("/api/tasks/", payload);
+      const { data } = await api.post("/api/tasks/", payload);
+      console.log("Created task:", data);
       navigate("/tasks");
     } catch (err) {
+      console.error("Create task error:", err?.response?.data || err);
       const message =
-        err?.response?.data?.detail ||
-        err?.response?.data?.message ||
-        "Failed to create task.";
+        typeof err?.response?.data === "string"
+          ? err.response.data
+          : JSON.stringify(err?.response?.data || { detail: "Failed to create task." });
       setError(message);
     } finally {
       setSubmitting(false);
@@ -99,6 +122,7 @@ export default function TaskCreate() {
                 <option value="high">High</option>
                 <option value="medium">Medium</option>
                 <option value="low">Low</option>
+                <option value="urgent">Urgent</option>
               </select>
             </div>
 
@@ -112,6 +136,7 @@ export default function TaskCreate() {
                 <option value="todo">To Do</option>
                 <option value="in progress">In Progress</option>
                 <option value="done">Done</option>
+                <option value="cancelled">Cancelled</option>
               </select>
             </div>
 
