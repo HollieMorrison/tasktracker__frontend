@@ -1,18 +1,12 @@
 import "./App.css";
+import { Toaster } from "react-hot-toast";
 import Tasks from "./tasks/tasks";
 import TaskPage from "./tasks/taskpage";
 import TaskCreate from "./tasks/task.create";
 import TaskEdit from "./tasks/task.edit";
 import LoginPage from "./social/login";
 import RegisterPage from "./social/register";
-import {
-  Routes,
-  Route,
-  Link,
-  NavLink,
-  useNavigate,
-  Navigate,
-} from "react-router-dom";
+import { Routes, Route, Link, NavLink, Navigate } from "react-router-dom";
 import { useEffect } from "react";
 import { useAuth } from "./store/auth";
 
@@ -23,7 +17,7 @@ function Header() {
     <header className="sticky-top">
       <nav className="navbar navbar-expand-lg navbar-dark bg-primary bg-gradient shadow-sm">
         <div className="container">
-          <Link className="navbar-brand fw-semibold" to="/">
+          <Link className="navbar-brand fw-semibold" to="/tasks">
             TaskTracker
           </Link>
 
@@ -36,27 +30,14 @@ function Header() {
             aria-expanded="false"
             aria-label="Toggle navigation"
           >
-            <span className="navbar-toggler-icon"></span>
+            <span className="navbar-toggler-icon" />
           </button>
 
           <div className="collapse navbar-collapse" id="mainNav">
             <ul className="navbar-nav me-auto mb-2 mb-lg-0">
               <li className="nav-item">
-                <NavLink
-                  end
-                  to="/"
-                  className={({ isActive }) => "nav-link" + (isActive ? " active" : "")}
-                >
-                  Home
-                </NavLink>
-              </li>
-
-              <li className="nav-item">
-                <NavLink
-                  to="/tasks"
-                  className={({ isActive }) => "nav-link" + (isActive ? " active" : "")}
-                >
-                  Tasks
+                <NavLink to="/tasks" className={({ isActive }) => `nav-link ${isActive ? "active" : ""}`}>
+                  Dashboard
                 </NavLink>
               </li>
             </ul>
@@ -110,33 +91,20 @@ function Footer() {
           </div>
 
           <div className="col-md-4 mb-3 mb-md-0 d-flex justify-content-center gap-3">
-            <a
-              href="https://github.com/"
-              className="text-light text-decoration-none"
-              target="_blank"
-              rel="noreferrer"
-            >
-              <i className="bi bi-github fs-4"></i>
+            <a href="https://github.com/" className="text-light text-decoration-none" target="_blank" rel="noreferrer">
+              GitHub
             </a>
-            <a
-              href="https://linkedin.com/"
-              className="text-light text-decoration-none"
-              target="_blank"
-              rel="noreferrer"
-            >
-              <i className="bi bi-linkedin fs-4"></i>
+            <a href="https://linkedin.com/" className="text-light text-decoration-none" target="_blank" rel="noreferrer">
+              LinkedIn
             </a>
-            <a
-              href="mailto:hello@tasktracker.com"
-              className="text-light text-decoration-none"
-            >
-              <i className="bi bi-envelope fs-4"></i>
+            <a href="mailto:hello@tasktracker.com" className="text-light text-decoration-none">
+              Email
             </a>
           </div>
 
           <div className="col-md-4 text-md-end">
             <small>
-              © {new Date().getFullYear()} <strong>TaskTracker API</strong>. All rights reserved.
+              © {new Date().getFullYear()} <strong>TaskTracker</strong>. All rights reserved.
             </small>
           </div>
         </div>
@@ -147,27 +115,21 @@ function Footer() {
 
 function App() {
   const { hydrate } = useAuth();
-  const nav = useNavigate();
 
   useEffect(() => {
-    (async () => {
-      await hydrate();
-    })();
+    hydrate();
   }, [hydrate]);
-
-  useEffect(() => {}, [nav]);
 
   return (
     <div className="d-flex flex-column min-vh-100">
+      <Toaster position="top-right" />
       <Header />
 
       <main className="flex-grow-1">
         <Routes>
           <Route path="/" element={<Navigate to="/tasks" replace />} />
-
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
-          <Route path="/tasks/:id/edit" element={<TaskEdit />} />
 
           <Route
             path="/tasks"
@@ -183,6 +145,15 @@ function App() {
             element={
               <Protected>
                 <TaskCreate />
+              </Protected>
+            }
+          />
+
+          <Route
+            path="/tasks/:id/edit"
+            element={
+              <Protected>
+                <TaskEdit />
               </Protected>
             }
           />
