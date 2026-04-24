@@ -37,10 +37,11 @@ const formatDate = (value) => {
 
 const Tasks = () => {
   const navigate = useNavigate();
-  const { tasks, fetchTasks, deleteTask, updateTask } = useTaskStore();
+  const { tasks, loading, fetchTasks, deleteTask, updateTask } = useTaskStore();
 
   const [searchTerm, setSearchTerm] = useState("");
   const [taskToDelete, setTaskToDelete] = useState(null);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   useEffect(() => {
     fetchTasks();
@@ -62,10 +63,18 @@ const Tasks = () => {
   const confirmDelete = async () => {
     if (!taskToDelete) return;
 
-    await deleteTask(taskToDelete.id);
-    toast.success("Task deleted successfully");
-    setTaskToDelete(null);
-    fetchTasks();
+    setIsDeleting(true);
+
+    try {
+      await deleteTask(taskToDelete.id);
+      toast.success("Task deleted successfully");
+      setTaskToDelete(null);
+      fetchTasks();
+    } catch {
+      toast.error("Could not delete task");
+    } finally {
+      setIsDeleting(false);
+    }
   };
 
   const handleComplete = async (task) => {
@@ -73,6 +82,16 @@ const Tasks = () => {
     toast.success("Task marked as complete");
     fetchTasks();
   };
+
+
+  if (loading) {
+    return (
+      <div className="container py-5 text-center">
+        <h2 className="page-title">Loading tasks...</h2>
+        <p className="page-subtitle">Please wait while your dashboard loads.</p>
+      </div>
+    );
+  }
 
   return (
     <div className="container py-5 page-shell">
@@ -200,8 +219,8 @@ const Tasks = () => {
           <Button variant="outline-secondary" onClick={() => setTaskToDelete(null)}>
             Cancel
           </Button>
-          <Button variant="danger" onClick={confirmDelete}>
-            Delete Task
+          <Button variant="danger" onClick={confirmDelete} disabled={isDeleting}>
+            {isDeleting ? "Deleting..." : "Delete Task"}
           </Button>
         </Modal.Footer>
       </Modal>

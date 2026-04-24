@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 import { useNavigate, useParams } from "react-router-dom";
 import { api } from "../api/client";
 
@@ -62,7 +63,7 @@ export default function TaskEdit() {
         due_date: dueDate ? `${dueDate}T23:59:00Z` : null,
       });
 
-      alert("Task updated successfully.");
+      toast.success("Task updated successfully");
       navigate("/tasks");
     } catch {
       setError("Could not update this task.");
