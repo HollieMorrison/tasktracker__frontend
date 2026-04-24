@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useEffect, useMemo, useState } from "react";
-import { Button, Col, Form, Row } from "react-bootstrap";
+import { Button, Col, Form, Modal, Row } from "react-bootstrap";
+import toast from "react-hot-toast";
 import {
   FaCalendarAlt,
   FaCheckCircle,
@@ -39,6 +40,7 @@ const Tasks = () => {
   const { tasks, fetchTasks, deleteTask, updateTask } = useTaskStore();
 
   const [searchTerm, setSearchTerm] = useState("");
+  const [taskToDelete, setTaskToDelete] = useState(null);
 
   useEffect(() => {
     fetchTasks();
@@ -57,19 +59,18 @@ const Tasks = () => {
     (task) => getStatusLabel(task) === "In Progress"
   ).length;
 
-  const handleDelete = async (id) => {
-    const confirmDelete = window.confirm(
-      "Are you sure you want to delete this task?"
-    );
-    if (!confirmDelete) return;
-    await deleteTask(id);
-    alert("Task deleted successfully.");
+  const confirmDelete = async () => {
+    if (!taskToDelete) return;
+
+    await deleteTask(taskToDelete.id);
+    toast.success("Task deleted successfully");
+    setTaskToDelete(null);
     fetchTasks();
   };
 
   const handleComplete = async (task) => {
     await updateTask(task.id, { ...task, state: "done" });
-    alert("Task marked as complete.");
+    toast.success("Task marked as complete");
     fetchTasks();
   };
 
@@ -174,7 +175,7 @@ const Tasks = () => {
                   <Button
                     variant="outline-danger"
                     size="sm"
-                    onClick={() => handleDelete(task.id)}
+                    onClick={() => setTaskToDelete(task)}
                   >
                     Delete
                   </Button>
@@ -184,6 +185,26 @@ const Tasks = () => {
           ))}
         </div>
       )}
+
+      <Modal show={!!taskToDelete} onHide={() => setTaskToDelete(null)} centered>
+        <Modal.Header closeButton>
+          <Modal.Title>Delete task?</Modal.Title>
+        </Modal.Header>
+
+        <Modal.Body>
+          Are you sure you want to delete{" "}
+          <strong>{taskToDelete?.title}</strong>? This action cannot be undone.
+        </Modal.Body>
+
+        <Modal.Footer>
+          <Button variant="outline-secondary" onClick={() => setTaskToDelete(null)}>
+            Cancel
+          </Button>
+          <Button variant="danger" onClick={confirmDelete}>
+            Delete Task
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 };
