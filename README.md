@@ -1,57 +1,63 @@
-# Task Tracker Frontend
+# Task Tracker
 
-**Task Tracker Frontend** is a responsive web application built with React.  
-It connects to the Task Tracker API to allow users to register, log in, and manage their daily tasks through an intuitive and visually clear interface.  
+**Task Tracker** is a responsive React application that connects to the Task Tracker Django REST API. It allows users to register, log in, and manage their personal tasks through a clean, accessible dashboard.
 
-The interface provides real-time interaction, state management with Zustand, and a clean Bootstrap layout to keep the user experience simple and accessible on all devices.
+Users can create, view, edit, complete, search, and delete tasks. The interface uses React, Bootstrap, Zustand, Axios, React Router, and toast notifications to provide a smooth user experience across desktop, tablet, and mobile devices.
 
-![Task Tracker Screenshot](./media/am-i-responsive.png)  
-[View Task Tracker Frontend Repository on GitHub](https://github.com/HollieMorrison/tasktracker__frontend)
+![Task Tracker Screenshot](./media/am-i-responsive.png)
+
+[View Frontend Repository](https://github.com/HollieMorrison/tasktracker__frontend)
+[View Backend Repository](https://github.com/HollieMorrison/tasktracker__backend)
 
 ---
-
-
-
 
 ## Table of Contents
 
-### [User Experience (UX)](#user-experience-ux-1)
-* [User Goals](#user-goals)
-### [Features](#features)
-* [Implemented Features](#implemented-features)
-### [Future Enhancements](#future-enhancements)
-### [Design](#design-1)
-### [Technologies Used](#technologies-used-1)
-### [Frameworks, Libraries & Tools](#frameworks-libraries--tools-1)
-### [Testing](#testing-1)
-* [Manual Testing](#manual-testing)
-### [Deployment and Local Setup](#deployment-and-local-setup-1)
-* [Running Locally](#running-locally)
-* [Connecting to Backend](#connecting-to-backend)
-* [Deployment Steps](#deployment-steps)
-### [Credits](#credits-1)
-### [Acknowledgements](#acknowledgements-1)
+- [User Experience UX](#user-experience-ux)
+- [Project Goals](#project-goals)
+- [Features](#features)
+- [Design](#design)
+- [Technologies Used](#technologies-used)
+- [Testing](#testing)
+- [Deployment and Local Setup](#deployment-and-local-setup)
+- [Credits](#credits)
+- [Acknowledgements](#acknowledgements)
 
 ---
 
-## User Experience (UX)
+## User Experience UX
 
-The Task Tracker frontend was built with the goal of keeping users productive without overwhelming them.  
-It provides a minimal and clean interface to manage tasks, paired with a responsive layout for both desktop and mobile screens.
-
-Users can:
-- Register and log in securely.  
-- Create, update, and delete their tasks.  
-- View all their active tasks in an organised dashboard.  
-- Log out safely when finished.  
+Task Tracker was created to help users organise daily tasks in a simple and focused way. The application avoids unnecessary complexity and gives users clear controls for managing their workload.
 
 ### User Goals
 
-*As a user of Task Tracker, I want to:*
-- Easily sign up and manage my account.  
-- Add new tasks quickly with minimal clicks.  
-- Mark tasks as complete or update them when needed.  
-- Navigate the app smoothly across all devices.  
+As a user, I want to:
+
+- Register for an account.
+- Log in securely.
+- See when I am logged in.
+- Create tasks with a title, description, priority, status, and due date.
+- View all my tasks in one dashboard.
+- Search for specific tasks.
+- Edit task details when plans change.
+- Mark tasks as complete.
+- Delete tasks only after confirmation.
+- Use the application on desktop and mobile devices.
+
+---
+
+## Project Goals
+
+The aim of this project was to build a full-stack productivity application with a React frontend and a Django REST Framework backend.
+
+The frontend was designed to:
+
+- Consume API data from the backend.
+- Provide full CRUD functionality for tasks.
+- Give clear feedback to users after actions.
+- Protect task routes so only logged-in users can access them.
+- Use responsive, accessible design principles.
+- Demonstrate component-based React development.
 
 ---
 
@@ -59,66 +65,114 @@ Users can:
 
 ### Implemented Features
 
-- **User Authentication:**  
-  Frontend integrates with the backend API for registration, login, logout, and token refresh.
+- **User Registration**
+  - Users can create a new account through the register form.
 
-- **Task Management Dashboard:**  
-  View, create, edit, and delete tasks dynamically without page reloads.
+- **User Login and Logout**
+  - Users can log in and log out securely.
+  - The navbar updates to show the current logged-in user.
 
-- **State Management with Zustand:**  
-  Lightweight state control for global data such as authentication and task lists.
+- **Protected Dashboard**
+  - The task dashboard is only available to authenticated users.
 
-- **Responsive Design:**  
-  Built with Bootstrap 5 to ensure mobile, tablet, and desktop usability.
+- **Task Dashboard**
+  - Displays the user’s tasks in a clean card layout.
+  - Shows summary cards for total tasks, completed tasks, and in-progress tasks.
 
-- **Error Handling:**  
-  Displays clear messages for failed logins, network issues, or invalid input.
+- **Create Task**
+  - Users can create a task with title, description, priority, status, and due date.
 
-- **API Integration with Axios:**  
-  Uses Axios for clean and consistent HTTP requests.
+- **Read Tasks**
+  - Tasks are fetched from the backend API and displayed on the frontend.
 
-Example flow:
-1. User logs in → receives JWT tokens from backend.  
-2. Tokens are stored in local state.  
-3. User can then create or edit tasks through the dashboard UI.  
+- **Edit Task**
+  - Users can update existing task details.
+
+- **Complete Task**
+  - Users can mark a task as complete directly from the dashboard.
+
+- **Delete Task**
+  - Users are shown a custom confirmation modal before a task is deleted.
+
+- **Search Tasks**
+  - Users can search tasks by title or description.
+
+- **User Feedback**
+  - Toast notifications confirm successful actions such as create, update, complete, and delete.
+
+- **Error Handling**
+  - Error messages are shown for failed login, failed task actions, or invalid data.
+
+- **Responsive Design**
+  - The app uses Bootstrap and custom CSS to work across desktop, tablet, and mobile screens.
 
 ---
 
-### Future Enhancements
+## Future Enhancements
 
-- Add task filters or search functionality.  
-- Implement task sorting (by date, status, or priority).  
-- Add user profile editing page.  
-- Include dark/light mode themes.  
+- Add task categories.
+- Add file attachments to tasks.
+- Add task assignment to multiple users.
+- Add drag-and-drop task status columns.
+- Add dark and light mode.
+- Add a user profile page.
 
 ---
 
 ## Design
 
-- Clean, minimal layout using Bootstrap’s grid system.  
-- Card-based task display for easy readability.  
-- Consistent color scheme and large buttons for accessibility.  
-- Uses React Router for smooth page navigation (login, register, dashboard).  
+The design uses a simple productivity-focused layout.
+
+### Colour Scheme
+
+- Blue is used for primary actions and navigation.
+- White cards are used for task content.
+- Dark footer provides visual contrast.
+- Status and priority badges help users quickly understand task importance.
+
+### Typography and Layout
+
+- Large headings make pages easy to scan.
+- Card spacing improves readability.
+- Buttons are placed near relevant actions.
+- Bootstrap grid classes support responsiveness.
+
+### Navigation
+
+React Router is used for frontend routing:
+
+- `/login`
+- `/register`
+- `/tasks`
+- `/tasks/create`
+- `/tasks/:id/edit`
 
 ---
 
 ## Technologies Used
 
-- [React 19](https://react.dev/)  
-- [JavaScript (ES6+)](https://developer.mozilla.org/en-US/docs/Web/JavaScript)  
-- [Bootstrap 5](https://getbootstrap.com/)  
-- [Axios](https://axios-http.com/)  
-- [Zustand](https://github.com/pmndrs/zustand)  
-- [React Router DOM](https://reactrouter.com/)  
+- [React](https://react.dev/)
+- JavaScript
+- HTML
+- CSS
+- Bootstrap
+- React Bootstrap
+- Axios
+- Zustand
+- React Router DOM
+- React Hot Toast
+- React Icons
+- Vite
 
 ---
 
 ## Frameworks, Libraries & Tools
 
-- [GitHub](https://github.com/) — version control and hosting.  
-- [Visual Studio Code](https://code.visualstudio.com/) — development environment.  
-- [Heroku] — for deployment.  
-- [ESLint](https://eslint.org/) — for code quality checks.   
+- Git and GitHub for version control.
+- Visual Studio Code for development.
+- Heroku for deployment.
+- ESLint for code quality.
+- Chrome DevTools for debugging and Lighthouse testing.
 
 ---
 
@@ -126,27 +180,22 @@ Example flow:
 
 ### Manual Testing
 
-The frontend was manually tested to confirm:
-- Smooth navigation between pages.  
-- Correct form validation on register/login.  
-- Accurate API communication for CRUD operations.  
-- Proper handling of invalid or expired tokens.  
-- Responsiveness across devices (tested on desktop and mobile).  
+| Feature | Action | Expected Result | Actual Result | Pass/Fail |
+|---|---|---|---|---|
+| Register | Create a new account | User account is created | User can register successfully | Pass |
+| Login | Enter valid credentials | User is logged in | Navbar shows logged-in username | Pass |
+| Invalid Login | Enter incorrect credentials | Error message appears | Invalid credentials message is shown | Pass |
+| Protected Route | Visit dashboard while logged out | User is redirected to login | User cannot access dashboard | Pass |
+| Create Task | Submit create task form | Task appears on dashboard | Task is created and displayed | Pass |
+| Edit Task | Update an existing task | Task details update | Edited task is saved | Pass |
+| Complete Task | Click complete | Task status changes to done | Task is marked complete | Pass |
+| Delete Task | Click delete and confirm | Task is removed | Task is deleted after confirmation | Pass |
+| Cancel Delete | Click delete then cancel | Task remains visible | Task is not deleted | Pass |
+| Search Tasks | Type into search box | Matching tasks are shown | Search filters the task list | Pass |
+| Logout | Click logout | User is logged out | Login/Register buttons show again | Pass |
+| Responsive Layout | Resize screen | Layout adapts correctly | Site works on mobile and desktop | Pass |
 
-Browsers tested:
-- Google Chrome  
-- Microsoft Edge  
-- Mozilla Firefox  
-- Samsung Internet (mobile)  
-
-Example manual test:
-1. Register a new user — confirm redirect to login page.  
-2. Login and confirm access to dashboard.  
-3. Create a new task and verify it appears instantly.  
-4. Edit and delete tasks — confirm changes reflected in the UI.  
-5. Logout — ensure tokens are cleared and redirected to login page.  
-
-Ive tested some results and they are shown here : 
+### Testing Evidence
 
 ![Create task](./media/Testing%20task%20creation.png)
 ![Edit task](./media/edit-task.png)
@@ -156,134 +205,65 @@ Ive tested some results and they are shown here :
 
 ---
 
-### Lighthouse Report
+## Lighthouse Report
 
-The Lighthouse tool built into Google Chrome was used to test the site’s overall performance, accessibility, and SEO on both mobile and desktop devices.
+Google Chrome Lighthouse was used to test performance, accessibility, best practices, and SEO.
 
-#### Mobile Analysis
+### Mobile Analysis
+
 <details>
 <summary>Dashboard Page</summary>
 
 ![Dashboard Lighthouse Mobile](./media/homepage-mobile-lighthouse-results.png)
+
 </details>
+
 <details>
 <summary>Login Page</summary>
 
 ![Login Lighthouse Mobile](./media/login-page-mobile-lighthouse-results.png)
+
 </details>
+
 <details>
 <summary>Register Page</summary>
 
 ![Register Lighthouse Mobile](./media/register-page-mobile-lighthouse-results.png)
+
 </details>
 
-#### Desktop Analysis
+### Desktop Analysis
+
 <details>
 <summary>Dashboard Page</summary>
 
 ![Dashboard Lighthouse Desktop](./media/homepage-desktop-lighthouse-results.png)
+
 </details>
+
 <details>
 <summary>Login Page</summary>
 
 ![Login Lighthouse Desktop](./media/login-page-desktop-lighthouse-results.png)
+
 </details>
+
 <details>
 <summary>Register Page</summary>
 
 ![Register Lighthouse Desktop](./media/register-page-desktop-lighthouse-results.png)
+
 </details>
 
-Each report confirmed:
-- Consistent performance across devices.  
-- Strong accessibility standards (color contrast and ARIA usage).  
-- High best practice and SEO scores.  
-- Fast page load and responsive layout.
+The Lighthouse reports confirmed strong accessibility, responsive layout, and good performance across tested pages.
 
+---
 
 ## Deployment and Local Setup
 
 ### Running Locally
 
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/HollieMorrison/tasktracker__frontend.git
+Clone the repository:
 
-Move into the project folder:
-
-cd tasktracker__frontend
-
-
-Install dependencies:
-
-npm install
-
-VITE_API_BASE_URL= 
-
-Connecting to Backend
-
-The frontend communicates with the backend API located at:
-
-http://127.0.0.1:8000/api
-
-
-Ensure the Task Tracker Backend is running before launching the frontend.
-You can adjust the API base URL in the .env file if deployed to another domain.
-
-
-Credits
-Code References
-
-React documentation for hooks and routing concepts.
-
-Axios and Zustand docs for request and state management patterns.
-
-Bootstrap for layout and responsive design utilities.
-
-Content
-
-Interface text and design decisions created by the project developer, Hollie Morrison.
-
-Acknowledgements
-
-Mentors and peers who provided design and usability feedback.
-
-Online React and Django communities for open-source learning resources.
-
-Friends and testers who helped identify UI improvements.
-
-## Manual Testing
-
-| Feature | Action | Expected Result | Actual Result | Pass/Fail |
-|---|---|---|---|---|
-| Register | Create a new account | User account is created | User can register successfully | Pass |
-| Login | Enter valid credentials | User is logged in | Navbar shows logged-in username | Pass |
-| Create Task | Submit create task form | Task appears on dashboard | Task is created and displayed | Pass |
-| Edit Task | Update an existing task | Task details update | Edited task is saved | Pass |
-| Complete Task | Click complete | Task status changes to done | Task is marked complete | Pass |
-| Delete Task | Click delete and confirm | Task is removed | Task is deleted after confirmation | Pass |
-| Search Tasks | Type into search box | Matching tasks are shown | Search filters the task list | Pass |
-| Logout | Click logout | User is logged out | Login/Register buttons show again | Pass |
-
-## Front-End Deployment
-
-The React front-end is deployed to Heroku.
-
-Deployment steps:
-1. Push the latest code to GitHub.
-2. Connect the GitHub repository to Heroku.
-3. Set the build command to `npm run build`.
-4. Set the start command to `npm start`.
-5. Deploy the `main` branch.
-6. Test the deployed site to confirm it matches the local version.
-
-## Current Features
-
-- User registration and login
-- Protected task dashboard
-- Create, read, update and delete tasks
-- Mark tasks as complete
-- Search tasks
-- Delete confirmation
-- Success feedback for task actions
-- Responsive layout using React and Bootstrap
+```bash
+git clone https://github.com/HollieMorrison/tasktracker__frontend.git
