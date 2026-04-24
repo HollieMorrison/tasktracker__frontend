@@ -63,11 +63,13 @@ const Tasks = () => {
     );
     if (!confirmDelete) return;
     await deleteTask(id);
+    alert("Task deleted successfully.");
     fetchTasks();
   };
 
   const handleComplete = async (task) => {
     await updateTask(task.id, { ...task, state: "done" });
+    alert("Task marked as complete.");
     fetchTasks();
   };
 

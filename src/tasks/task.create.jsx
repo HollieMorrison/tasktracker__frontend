@@ -56,6 +56,7 @@ export default function TaskCreate() {
     try {
       const { data } = await api.post("/api/tasks/", payload);
       console.log("Created task:", data);
+      alert("Task created successfully.");
       navigate("/tasks");
     } catch (err) {
       console.error("Create task error:", err?.response?.data || err);

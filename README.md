@@ -251,3 +251,39 @@ Mentors and peers who provided design and usability feedback.
 Online React and Django communities for open-source learning resources.
 
 Friends and testers who helped identify UI improvements.
+
+## Manual Testing
+
+| Feature | Action | Expected Result | Actual Result | Pass/Fail |
+|---|---|---|---|---|
+| Register | Create a new account | User account is created | User can register successfully | Pass |
+| Login | Enter valid credentials | User is logged in | Navbar shows logged-in username | Pass |
+| Create Task | Submit create task form | Task appears on dashboard | Task is created and displayed | Pass |
+| Edit Task | Update an existing task | Task details update | Edited task is saved | Pass |
+| Complete Task | Click complete | Task status changes to done | Task is marked complete | Pass |
+| Delete Task | Click delete and confirm | Task is removed | Task is deleted after confirmation | Pass |
+| Search Tasks | Type into search box | Matching tasks are shown | Search filters the task list | Pass |
+| Logout | Click logout | User is logged out | Login/Register buttons show again | Pass |
+
+## Front-End Deployment
+
+The React front-end is deployed to Heroku.
+
+Deployment steps:
+1. Push the latest code to GitHub.
+2. Connect the GitHub repository to Heroku.
+3. Set the build command to `npm run build`.
+4. Set the start command to `npm start`.
+5. Deploy the `main` branch.
+6. Test the deployed site to confirm it matches the local version.
+
+## Current Features
+
+- User registration and login
+- Protected task dashboard
+- Create, read, update and delete tasks
+- Mark tasks as complete
+- Search tasks
+- Delete confirmation
+- Success feedback for task actions
+- Responsive layout using React and Bootstrap

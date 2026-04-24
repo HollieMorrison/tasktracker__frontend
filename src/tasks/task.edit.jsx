@@ -62,6 +62,7 @@ export default function TaskEdit() {
         due_date: dueDate ? `${dueDate}T23:59:00Z` : null,
       });
 
+      alert("Task updated successfully.");
       navigate("/tasks");
     } catch {
       setError("Could not update this task.");
