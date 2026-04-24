@@ -2,6 +2,7 @@ import "./App.css";
 import Tasks from "./tasks/tasks";
 import TaskPage from "./tasks/taskpage";
 import TaskCreate from "./tasks/task.create";
+import TaskEdit from "./tasks/task.edit";
 import LoginPage from "./social/login";
 import RegisterPage from "./social/register";
 import {
@@ -166,6 +167,7 @@ function App() {
 
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
+          <Route path="/tasks/:id/edit" element={<TaskEdit />} />
 
           <Route
             path="/tasks"
