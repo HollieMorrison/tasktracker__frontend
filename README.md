@@ -197,11 +197,16 @@ React Router is used for frontend routing:
 
 ### Testing Evidence
 
-![Create task](./media/Testing%20task%20creation.png)
-![Edit task](./media/edit-task.png)
-![Delete task](./media/delete-task-warning.png)
-![Home page](./media/tasktracker-home.png)
-![Colour change for overdue tasks](./media/task-overdue-vs-not-overdue.png)
+![Home page](./media/home.png)
+![Register](./media/Register-page.png)
+![Login](./media/Login.png)
+![Task Dashboard](./media/Task-dashboard.png)
+![Create task](./media/Create-task.png)
+![Edit task](./media/Edit-tasks.png)
+![Task list status](./media/Task-list-status.png)
+![Change Status](./media/Task-changed-to-complete.png)
+![Delete task warning](./media/Delete-task-warning.png)
+![Task deleted](./media/Task-deleted.png)
 
 ---
 
@@ -214,21 +219,27 @@ Google Chrome Lighthouse was used to test performance, accessibility, best pract
 <details>
 <summary>Dashboard Page</summary>
 
-![Dashboard Lighthouse Mobile](./media/homepage-mobile-lighthouse-results.png)
+![Dashboard Mobile](./media/Mobile-view-of-dashboard.png)
+
+![Dashboard Mobile Lighthouse Results](./media/Lighthouse-dashboard.png)
 
 </details>
 
 <details>
 <summary>Login Page</summary>
 
-![Login Lighthouse Mobile](./media/login-page-mobile-lighthouse-results.png)
+![Login Mobile](./media/login-mobile.png)
+
+![Login Mobile Lighthouse Results](./media/Lighthouse-login.png)
 
 </details>
 
 <details>
 <summary>Register Page</summary>
 
-![Register Lighthouse Mobile](./media/register-page-mobile-lighthouse-results.png)
+![Register Mobile](./media/Register-mobile.png)
+
+![Register Lighthouse Mobile](./media/Lighthouse-mobile-register.png)
 
 </details>
 
@@ -237,21 +248,21 @@ Google Chrome Lighthouse was used to test performance, accessibility, best pract
 <details>
 <summary>Dashboard Page</summary>
 
-![Dashboard Lighthouse Desktop](./media/homepage-desktop-lighthouse-results.png)
+![Dashboard Lighthouse Desktop](./media/Lighthouse-dashboard-desktop.png)
 
 </details>
 
 <details>
 <summary>Login Page</summary>
 
-![Login Lighthouse Desktop](./media/login-page-desktop-lighthouse-results.png)
+![Login Lighthouse Desktop](./media/Lighthouse-login-desktop.png)
 
 </details>
 
 <details>
 <summary>Register Page</summary>
 
-![Register Lighthouse Desktop](./media/register-page-desktop-lighthouse-results.png)
+![Register Lighthouse Desktop](./media/Lighthouse-register-desktop.png)
 
 </details>
 
