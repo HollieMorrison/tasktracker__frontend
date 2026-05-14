@@ -267,3 +267,129 @@ Clone the repository:
 
 ```bash
 git clone https://github.com/HollieMorrison/tasktracker__frontend.git
+cd tasktracker__frontend
+```
+
+---
+
+### Install Dependencies
+
+```bash
+npm install
+```
+
+---
+
+### Environment Variables
+
+Create a `.env` file in the root directory:
+
+```env
+VITE_API_BASE_URL=https://tasktrackerp5-932a5dcb7e37.herokuapp.com/api
+```
+
+---
+
+### Start Development Server
+
+```bash
+npm run dev
+```
+
+The application will run locally on:
+
+```text
+http://localhost:5173
+```
+
+---
+
+## Frontend Deployment
+
+The frontend application is deployed using Heroku.
+
+### Deployment Steps
+
+1. Push the latest code to GitHub.
+2. Create a Heroku application.
+3. Connect the GitHub repository to Heroku.
+4. Set the build command:
+
+```bash
+npm run build
+```
+
+5. Set the start command:
+
+```bash
+npm start
+```
+
+6. Add required environment variables in Heroku Config Vars.
+7. Deploy the `main` branch.
+8. Test the deployed application to ensure all frontend functionality works correctly.
+
+### Live Deployment
+
+- Frontend Live App: https://tasktrackerfrontend-b0125962c8ee.herokuapp.com
+- Backend API: https://tasktrackerp5-932a5dcb7e37.herokuapp.com
+
+---
+
+## UX Design Process
+
+Wireframes were created during the planning stage to organise layout structure, navigation flow, and user interaction patterns.
+
+The final implementation closely follows the original wireframe designs while improving spacing, responsiveness, and accessibility throughout development.
+
+### Wireframes
+
+- Login Page Wireframe
+- Register Page Wireframe
+- Dashboard Page Wireframe
+
+---
+
+## Agile Development
+
+GitHub Projects was used to manage development tasks using Agile methodology.
+
+User stories were organised into development stages and implemented incrementally throughout the project lifecycle.
+
+Example user stories included:
+
+- User authentication
+- Task CRUD functionality
+- Search functionality
+- Responsive dashboard design
+- Delete confirmation modal
+- Task completion functionality
+
+---
+
+## Credits
+
+### Code References
+
+- React documentation
+- React Router documentation
+- Axios documentation
+- Zustand documentation
+- Bootstrap documentation
+- Django REST Framework documentation
+
+### Media
+
+- Wireframes and screenshots created by the project developer.
+
+### Content
+
+- All application content and design decisions were created by Hollie Morrison.
+
+---
+
+## Acknowledgements
+
+- Code Institute mentors and support
+- Open-source React and Django communities
+- Friends and testers who provided usability feedback
