@@ -197,15 +197,54 @@ React Router is used for frontend routing:
 
 ### Testing Evidence
 
+---
+### home page
+
 ![Home page](./media/home.png)
+---
+
+### register page
+
 ![Register](./media/Register-page.png)
+---
+
+### login page
+
 ![Login](./media/Login.png)
+---
+
+### task dashboard
+
 ![Task Dashboard](./media/Task-dashboard.png)
+---
+
+### create task
+
 ![Create task](./media/Create-task.png)
+---
+
+### edit task 
+
 ![Edit task](./media/Edit-tasks.png)
+---
+
+### task list status
+
 ![Task list status](./media/Task-list-status.png)
+---
+
+### changed status
+
 ![Change Status](./media/Task-changed-to-complete.png)
+---
+
+### delete task warning 
+
 ![Delete task warning](./media/Delete-task-warning.png)
+---
+
+### task deleted 
+
 ![Task deleted](./media/Task-deleted.png)
 
 ---
@@ -219,7 +258,13 @@ Google Chrome Lighthouse was used to test performance, accessibility, best pract
 <details>
 <summary>Dashboard Page</summary>
 
+### dashboard mobile
+
 ![Dashboard Mobile](./media/Mobile-view-of-dashboard.png)
+
+---
+
+### dashboard mobile lighthouse report
 
 ![Dashboard Mobile Lighthouse Results](./media/Lighthouse-dashboard.png)
 
@@ -228,7 +273,13 @@ Google Chrome Lighthouse was used to test performance, accessibility, best pract
 <details>
 <summary>Login Page</summary>
 
+### login mobile 
+
 ![Login Mobile](./media/login-mobile.png)
+
+---
+
+### login mobile lighthouse report 
 
 ![Login Mobile Lighthouse Results](./media/Lighthouse-login.png)
 
@@ -237,7 +288,13 @@ Google Chrome Lighthouse was used to test performance, accessibility, best pract
 <details>
 <summary>Register Page</summary>
 
+### register mobile page 
+
 ![Register Mobile](./media/Register-mobile.png)
+
+---
+
+### register lighthouse report
 
 ![Register Lighthouse Mobile](./media/Lighthouse-mobile-register.png)
 
@@ -248,21 +305,33 @@ Google Chrome Lighthouse was used to test performance, accessibility, best pract
 <details>
 <summary>Dashboard Page</summary>
 
+### dashboard lighthouse desktop
+
 ![Dashboard Lighthouse Desktop](./media/Lighthouse-dashboard-desktop.png)
+
+---
 
 </details>
 
 <details>
 <summary>Login Page</summary>
 
+### login lighthouse desktop 
+
 ![Login Lighthouse Desktop](./media/Lighthouse-login-desktop.png)
+
+---
 
 </details>
 
 <details>
 <summary>Register Page</summary>
 
+### register lighthouse desktop
+
 ![Register Lighthouse Desktop](./media/Lighthouse-register-desktop.png)
+
+---
 
 </details>
 
